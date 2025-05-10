@@ -55,3 +55,154 @@ Examples:
 
 If not specified, the client's locale will be used by default.
 
+## Examples
+
+### Basic Formatting
+
+```ts
+const { $luxon } = useLuxon()
+
+// Format current date with predefined templates
+$luxon(new Date(), 'short')          // '7/12/2024, 12:23 PM'
+$luxon(new Date(), 'full')           // 'July 12, 2024 at 12:23 PM UTC'
+$luxon(new Date(), 'fulls')          // 'July 12, 2024 at 12:23:49 PM UTC'
+$luxon(new Date(), 'huge')           // 'Friday, July 12, 2024 at 12:23 PM UTC'
+
+// Format specific dates
+$luxon('2024-07-12T12:23:49.000Z', 'short')   // '7/12/2024, 12:23 PM'
+$luxon('2024-07-12', 'date_short')            // '7/12/2024'
+```
+
+### Date-Only Formatting
+
+```ts
+const { $luxon } = useLuxon()
+
+// Date-specific formats
+$luxon('2024-07-12', 'date_full')    // 'July 12, 2024'
+$luxon('2024-07-12', 'date_huge')    // 'Friday, July 12, 2024'
+$luxon('2024-07-12', 'date_med')     // 'Jul 12, 2024'
+$luxon('2024-07-12', 'date_medd')    // 'Fri, Jul 12, 2024'
+$luxon('2024-07-12', 'date_short')   // '7/12/2024'
+```
+
+### Time-Only Formatting
+
+```ts
+const { $luxon } = useLuxon()
+
+// Time-specific formats
+$luxon('16:20:00', 'time')                // '4:20 PM'
+$luxon('16:20:00', 'times')               // '4:20:00 PM'
+$luxon('16:20:00', 'time24')              // '16:20'
+$luxon('16:20:00', 'time24s')             // '16:20:00'
+$luxon('16:20:00', 'time24longoffset')    // '16:20:00 UTC'
+```
+
+### Specialized Formats
+
+```ts
+const { $luxon } = useLuxon()
+
+// Special formats
+$luxon('2024-07-12T12:23:49.000Z', 'iso')    // '2024-07-12T12:23:49.000Z'
+$luxon('2024-07-12T12:23:49.000Z', 'sql')    // '2024-07-12 12:23:49.000 Z'
+$luxon('2024-07-12T12:23:49.000Z', 'http')   // 'Fri, 12 Jul 2024 12:23:49 GMT'
+$luxon('2024-07-12T12:23:49.000Z', 'rfc')    // 'Fri, 12 Jul 2024 12:23:49 +0000'
+
+// Numeric formats
+$luxon('2024-07-12T12:23:49.000Z', 'millis') // 1720787029000
+$luxon('2024-07-12T12:23:49.000Z', 'unix')   // 1720787029
+$luxon('2024-07-12T12:23:49.000Z', 'seconds') // 1720787029
+
+// JavaScript Date object
+const jsDate = $luxon('2024-07-12T12:23:49.000Z', 'jsdate') // returns Date object
+```
+
+### Custom Format Strings
+
+```ts
+const { $luxon } = useLuxon()
+
+// Custom format strings
+$luxon(new Date(), 'yyyy-MM-dd')            // '2024-07-12'
+$luxon(new Date(), 'dd/MM/yyyy HH:mm:ss')   // '12/07/2024 12:23:49'
+$luxon(new Date(), 'ccc, d LLL yyyy')       // 'Fri, 12 Jul 2024'
+```
+
+### With Timezone and Locale Options
+
+```ts
+const { $luxon } = useLuxon()
+
+// Format with custom timezone
+$luxon('2024-07-12T12:23:49.000Z', { 
+  format: 'full', 
+  zone: 'America/New_York'
+}) // 'July 12, 2024 at 8:23 AM EDT'
+
+// Format with custom locale
+$luxon('2024-07-12T12:23:49.000Z', { 
+  format: 'full', 
+  locale: 'it'
+}) // '12 luglio 2024 alle ore 12:23 UTC'
+
+// Format with both custom timezone and locale
+$luxon('2024-07-12T12:23:49.000Z', { 
+  format: 'full', 
+  zone: 'Europe/Rome',
+  locale: 'it'
+}) // '12 luglio 2024 alle ore 14:23 CEST'
+```
+
+### Using with Custom Input Format
+
+```ts
+const { $luxon } = useLuxon()
+
+// Format with custom input format
+$luxon('12/07/2024', 'full', 'dd/MM/yyyy') 
+// 'July 12, 2024 at 12:00 AM UTC'
+
+// Format with custom input timezone
+$luxon('2024-07-12T12:23:49', { format: 'huges', zone: 'Europe/Rome' }, { zone: 'Asia/Tokyo' })
+// 'Friday, July 12, 2024 at 5:23:49 AM Central European Summer Time'
+```
+
+### Using Custom Templates
+
+```ts
+// In nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['nuxt-luxon'],
+  luxon: {
+    templates: {
+      date: { format: 'dd/MM/yyyy' },
+      customTime: { format: 'HH:mm:ss (z)' }
+    }
+  }
+})
+
+// In your component
+const { $luxon } = useLuxon()
+$luxon('2024-07-12T12:23:49.000Z', 'date')      // '12/07/2024'
+$luxon('2024-07-12T12:23:49.000Z', 'customTime') // '12:23:49 (UTC)'
+```
+
+### Relative Time Formatting
+
+```ts
+const { $luxon } = useLuxon()
+
+// Format as relative time
+$luxon(new Date(), 'relative')  // 'just now'
+$luxon(DateTime.now().minus({ days: 1 }), 'relative') // '1 day ago'
+$luxon(DateTime.now().plus({ hours: 5 }), 'relative') // 'in 5 hours'
+
+// With custom options
+$luxon(DateTime.now().minus({ months: 2 }), {
+  format: 'relative',
+  relative: { unit: 'months' }
+}) // '2 months ago'
+```
+
