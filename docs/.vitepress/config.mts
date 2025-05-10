@@ -5,6 +5,9 @@ export default defineConfig({
   title: 'Nuxt Luxon',
   description: 'Easy DateTime formatting & parsing with Luxon in Nuxt applications',
   themeConfig: {
+    search: {
+      provider: 'local',
+    },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
