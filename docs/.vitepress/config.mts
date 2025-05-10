@@ -9,22 +9,24 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/' },
-      // { text: 'API Reference', link: '/api/' },
       // { text: 'Examples', link: '/examples/' },
     ],
 
-    sidebar: {
-      '/guide/': [
-        {
-          text: 'Introduction',
-          items: [
-            { text: 'Getting Started', link: '/guide/' },
-            { text: 'Configuration', link: '/guide/configuration' },
-          ],
-        },
-      ],
-
-    },
+    sidebar: [
+      {
+        text: 'Introduction',
+        items: [
+          { text: 'Getting Started', link: '/guide/' },
+          { text: 'Configuration', link: '/guide/configuration' },
+        ],
+      },
+      {
+        text: 'Api',
+        items: [
+          { text: 'useLuxon', link: '/api/useLuxon' },
+        ],
+      },
+    ],
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/dnldsht/nuxt-luxon' },
