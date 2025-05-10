@@ -99,6 +99,46 @@ export default defineNuxtConfig({
 })
 ```
 
+## Custom Templates
+
+Templates can be used for both parsing and formatting dates. This is especially useful when you need consistent date formats across your application or when working with specific regional formats.
+
+```ts
+export default defineNuxtConfig({
+  modules: ['nuxt-luxon'],
+  luxon: {
+    templates: {
+      userDate: {
+        zone: 'client',
+        format: 'dd MM yyyy',
+      },
+      serverAMS: {
+        zone: 'Europe/Amsterdam',
+        format: 'dd-MM-yyyy HH:mm:ss',
+      },
+      client: {
+        zone: 'local',
+        format: 'short',
+      },
+    }
+  }
+})
+```
+
+Then you can use these templates for both parsing and formatting:
+
+```vue
+<script setup>
+const { $luxon, $lp } = useLuxon()
+
+// Parse a date using a template
+const parsedDate = $lp('15 05 2025', 'userDate')
+
+// Format a date using a template
+const amsterdamTime = $luxon(new Date(), 'serverAMS')
+</script>
+```
+
 ## API
 
 ### Composable: `useLuxon()`

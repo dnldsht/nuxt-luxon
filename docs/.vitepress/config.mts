@@ -8,7 +8,23 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'Guide', link: '/guide/' },
+      // { text: 'API Reference', link: '/api/' },
+      // { text: 'Examples', link: '/examples/' },
     ],
+
+    sidebar: {
+      '/guide/': [
+        {
+          text: 'Introduction',
+          items: [
+            { text: 'Getting Started', link: '/guide/' },
+            { text: 'Configuration', link: '/guide/configuration' },
+          ],
+        },
+      ],
+
+    },
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/dnldsht/nuxt-luxon' },
