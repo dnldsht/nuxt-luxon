@@ -25,6 +25,7 @@ export default defineConfig({
         items: [
           { text: 'useLuxon', link: '/api/useLuxon' },
           { text: 'Parsing', link: '/api/parsing' },
+          { text: 'Formatting', link: '/api/formatting' },
           { text: 'Tokens', link: '/api/tokens' },
         ],
       },
