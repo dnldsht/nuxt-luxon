@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import type { DateTime } from 'luxon'
-import { computed, ref } from 'vue'
+import { computed, ref, toValue } from 'vue'
 import { useLuxon } from '../src/runtime/composables/useLuxon'
 import type { ParseInput, FormatOutputOptions, FormatInputOptions } from '../src/runtime/types'
 import { DEFAULT_OPTIONS } from '../src/module'
@@ -41,7 +41,7 @@ describe('useLuxon', () => {
     const dateString = '2024-03-10'
     const expectedFormattedDate = '03/10/2024'
     const formattedDate = useLuxon(dateString, 'MM/dd/yyyy')
-    expect(formattedDate).toBe(expectedFormattedDate)
+    expect(formattedDate.value).toBe(toValue(expectedFormattedDate))
   })
 
   it('must accept ref and getters', () => {
@@ -49,12 +49,12 @@ describe('useLuxon', () => {
     const expectedFormattedDate = '03/10/2024'
 
     // value
-    expect(useLuxon(dateString, 'MM/dd/yyyy')).toBe(expectedFormattedDate)
+    expect(useLuxon(dateString, 'MM/dd/yyyy').value).toBe(expectedFormattedDate)
     // ref
-    expect(useLuxon(ref(dateString), 'MM/dd/yyyy')).toBe(expectedFormattedDate)
+    expect(useLuxon(ref(dateString), 'MM/dd/yyyy').value).toBe(expectedFormattedDate)
     // getter
-    expect(useLuxon(() => dateString, 'MM/dd/yyyy')).toBe(expectedFormattedDate)
+    expect(useLuxon(() => dateString, 'MM/dd/yyyy').value).toBe(expectedFormattedDate)
     // computed
-    expect(useLuxon(computed(() => dateString), 'MM/dd/yyyy')).toBe(expectedFormattedDate)
+    expect(useLuxon(computed(() => dateString), 'MM/dd/yyyy').value).toBe(expectedFormattedDate)
   })
 })
