@@ -41,7 +41,7 @@ describe('useLuxon', () => {
     const dateString = '2024-03-10'
     const expectedFormattedDate = '03/10/2024'
     const formattedDate = useLuxon(dateString, 'MM/dd/yyyy')
-    expect(formattedDate.value).toBe(toValue(expectedFormattedDate))
+    expect(formattedDate.value).toBe(expectedFormattedDate)
   })
 
   it('must accept ref and getters', () => {
