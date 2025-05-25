@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import type { DateTime } from 'luxon'
-import { computed, ref, toValue } from 'vue'
+import { computed, ref } from 'vue'
 import { useLuxon } from '../src/runtime/composables/useLuxon'
 import type { ParseInput, FormatOutputOptions, FormatInputOptions } from '../src/runtime/types'
 import { DEFAULT_OPTIONS } from '../src/module'
