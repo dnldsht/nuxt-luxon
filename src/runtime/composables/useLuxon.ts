@@ -1,5 +1,5 @@
 import type { DateTime } from 'luxon'
-import { toValue, type Ref } from 'vue'
+import { toValue, type Ref, computed, type ComputedRef } from 'vue'
 import type { ParseInput, FormatInputOptions, FormatOutputOptions, LuxonOptions } from '../types'
 import { luxFormat, luxParse } from '../core/utils'
 
@@ -7,29 +7,31 @@ import { useRuntimeConfig } from '#app'
 
 type MaybeRef<T> = T | Ref<T> | (() => T)
 
-export function useLuxon(value: MaybeRef<ParseInput>, outuputFormat?: FormatOutputOptions, inputFormat?: FormatInputOptions): string
+export function useLuxon(value: MaybeRef<ParseInput>, outputFormat?: MaybeRef<FormatOutputOptions | undefined>, inputFormat?: MaybeRef<FormatInputOptions | undefined>): ComputedRef<string>
 export function useLuxon(): {
-  $luxon: (value: MaybeRef<ParseInput>, outuputFormat?: FormatOutputOptions, inputFormat?: FormatInputOptions) => string
-  $lf: (value: MaybeRef<ParseInput>, outuputFormat?: FormatOutputOptions, inputFormat?: FormatInputOptions) => string
+  $luxon: (value: MaybeRef<ParseInput>, outputFormat?: MaybeRef<FormatOutputOptions | undefined>, inputFormat?: MaybeRef<FormatInputOptions | undefined>) => string
+  $lf: (value: MaybeRef<ParseInput>, outputFormat?: MaybeRef<FormatOutputOptions | undefined>, inputFormat?: MaybeRef<FormatInputOptions | undefined>) => string
   $lp: (value: MaybeRef<ParseInput>, format?: FormatInputOptions) => DateTime
 }
-export function useLuxon(value?: MaybeRef<ParseInput>, outuputFormat?: FormatOutputOptions, inputFormat?: FormatInputOptions) {
+export function useLuxon(value?: MaybeRef<ParseInput>, outputFormat?: MaybeRef<FormatOutputOptions | undefined>, inputFormat?: MaybeRef<FormatInputOptions | undefined>) {
   const options = useRuntimeConfig().public.luxon as Required<LuxonOptions>
 
-  const $luxon = formatter(options)
+  const $luxonInstance = formatter(options)
 
   if (value !== undefined) {
-    return $luxon(value, outuputFormat, inputFormat)
+    return computed(() => $luxonInstance(value, outputFormat, inputFormat))
   }
 
-  return { $luxon, $lf: $luxon, $lp: luxParse(options) }
+  return { $luxon: $luxonInstance, $lf: $luxonInstance, $lp: luxParse(options) }
 }
 
 function formatter(options: Required<LuxonOptions>) {
-  const $luxon = luxFormat(options)
+  const coreLuxFormat = luxFormat(options)
 
-  return (value: MaybeRef<ParseInput>, outuputFormat?: FormatOutputOptions, inputFormat?: FormatInputOptions) => {
+  return (value: MaybeRef<ParseInput>, outputFormat?: MaybeRef<FormatOutputOptions | undefined>, inputFormat?: MaybeRef<FormatInputOptions | undefined>) => {
     const val = toValue(value)
-    return $luxon(val, outuputFormat, inputFormat)
+    const outFmt = toValue(outputFormat)
+    const inFmt = toValue(inputFormat)
+    return coreLuxFormat(val, outFmt, inFmt)
   }
 }
