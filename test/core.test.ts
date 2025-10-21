@@ -17,6 +17,7 @@ describe('datetimes', () => {
     const { $luxon } = init({
       output: {
         zone: 'utc',
+        locale: 'en',
       },
     })
 
@@ -103,6 +104,7 @@ describe('datetimes', () => {
     const { $luxon } = init({
       output: {
         zone: 'America/New_York',
+        locale: 'en',
       },
     })
 
