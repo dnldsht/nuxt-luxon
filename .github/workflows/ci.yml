@@ -25,7 +25,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile && pnpm --filter ./playground install --frozen-lockfile
+        run: pnpm install --frozen-lockfile && pnpm --filter playground install --frozen-lockfile
 
       - name: Lint
         run: pnpm run lint
