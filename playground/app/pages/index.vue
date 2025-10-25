@@ -20,8 +20,7 @@
         type="number"
         placeholder="+ days"
       />
-
-      <code class="ml-1">$lp(now).plus({ days })</code>{{ $luxon($lp(now).plus({ days: Number(days) }), 'full') }}<br>
+      <code class="ml-1">$lp(now).plus({ days: Number(days) })</code>{{ $luxon($lp(now).plus({ days: Number(days) }), 'full') }}<br>
     </UCard>
   </div>
 </template>

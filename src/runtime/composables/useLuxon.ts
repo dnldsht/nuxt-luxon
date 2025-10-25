@@ -9,11 +9,11 @@ export function useLuxon(value: MaybeRefOrGetter<ParseInput>, outputFormat?: May
 export function useLuxon(): {
   luxon: (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => ComputedRef<string>
   lf: (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => ComputedRef<string>
-  lp: (value: MaybeRefOrGetter<ParseInput>, format?: FormatInputOptions) => ComputedRef<DateTime>
+  lp: (value: MaybeRefOrGetter<ParseInput>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => ComputedRef<DateTime>
 
   $luxon: (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => string
   $lf: (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => string
-  $lp: (value: MaybeRefOrGetter<ParseInput>, format?: FormatInputOptions) => DateTime
+  $lp: (value: MaybeRefOrGetter<ParseInput>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => DateTime
 }
 
 export function useLuxon(value?: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) {
