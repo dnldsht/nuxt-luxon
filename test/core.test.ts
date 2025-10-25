@@ -1,14 +1,14 @@
 import { DateTime } from 'luxon'
 import { describe, expect, it } from 'vitest'
 import defu from 'defu'
-import { luxFormat, luxParse } from '../src/runtime/core/utils'
+import { makeFormatter, makeParser } from '../src/runtime/core'
 import { DEFAULT_OPTIONS } from '../src/module'
 import type { LuxonOptions } from '../src/runtime/types'
 
 function init(_options: LuxonOptions = {}) {
   const options = defu(_options, DEFAULT_OPTIONS) as Required<LuxonOptions>
-  const $luxon = luxFormat(options)
-  const $lp = luxParse(options)
+  const $luxon = makeFormatter(options)
+  const $lp = makeParser(options)
   return { $luxon, $lp }
 }
 
