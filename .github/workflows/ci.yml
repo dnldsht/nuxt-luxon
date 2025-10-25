@@ -46,7 +46,10 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile && pnpm --filter playground install --frozen-lockfile
+        run: pnpm install --frozen-lockfile 
+
+      - name: Install playground dependencies
+        run: pnpm --filter ./playground install --frozen-lockfile
 
       - name: Playground prepare
         run: pnpm run dev:prepare
