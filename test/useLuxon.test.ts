@@ -1,18 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
-import type { DateTime } from 'luxon'
 import { computed, ref } from 'vue'
 import { useLuxon } from '../src/runtime/composables/useLuxon'
-import type { ParseInput, FormatOutputOptions, FormatInputOptions } from '../src/runtime/types'
 import { DEFAULT_OPTIONS } from '../src/module'
-
-type LuxonFormatter = (value: ParseInput, outuputFormat?: FormatOutputOptions, inputFormat?: FormatInputOptions) => string | DateTime | null | undefined
-type LuxonParser = (value: ParseInput, format?: FormatInputOptions) => DateTime | null
-
-interface LuxonComposableUtils {
-  $luxon: LuxonFormatter
-  $lf: LuxonFormatter
-  $lp: LuxonParser
-}
 
 vi.mock('#app', () => ({
   useRuntimeConfig: () => ({
@@ -28,13 +17,16 @@ describe('useLuxon', () => {
   })
 
   it('should return $luxon, $lf, and $lp when no arguments are provided', () => {
-    const result = useLuxon() as LuxonComposableUtils // Type assertion
-    const { $luxon, $lf, $lp } = result
+    const { $luxon, $lf, $lp, luxon, lf, lp } = useLuxon()
     expect($luxon).toBeDefined()
     expect($lf).toBeDefined()
     expect($lp).toBeDefined()
-    // Check if $luxon and $lf are the same function
     expect($luxon).toBe($lf)
+
+    expect(luxon).toBeDefined()
+    expect(lf).toBeDefined()
+    expect(lp).toBeDefined()
+    expect(luxon).toBe(lf)
   })
 
   it('should return formatted date when value is provided', () => {
@@ -44,7 +36,7 @@ describe('useLuxon', () => {
     expect(formattedDate.value).toBe(expectedFormattedDate)
   })
 
-  it('must accept ref and getters', () => {
+  it('format must accept ref and getters', () => {
     const dateString = '2024-03-10'
     const expectedFormattedDate = '03/10/2024'
 
@@ -56,5 +48,21 @@ describe('useLuxon', () => {
     expect(useLuxon(() => dateString, 'MM/dd/yyyy').value).toBe(expectedFormattedDate)
     // computed
     expect(useLuxon(computed(() => dateString), 'MM/dd/yyyy').value).toBe(expectedFormattedDate)
+  })
+
+  it('parse must accept ref and getters', () => {
+    const dateString = '03/10/2024'
+    const expectedISODate = '2024-03-10'
+
+    const { lp } = useLuxon()
+
+    // value
+    expect(lp(dateString, 'MM/dd/yyyy').value.toISODate()).toBe(expectedISODate)
+    // ref
+    expect(lp(ref(dateString), 'MM/dd/yyyy').value.toISODate()).toBe(expectedISODate)
+    // getter
+    expect(lp(() => dateString, 'MM/dd/yyyy').value.toISODate()).toBe(expectedISODate)
+    // computed
+    expect(lp(computed(() => dateString), 'MM/dd/yyyy').value.toISODate()).toBe(expectedISODate)
   })
 })

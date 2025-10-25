@@ -1,6 +1,15 @@
 export default defineNuxtConfig({
-  modules: ['../src/module'],
-  devtools: { enabled: true },
+  modules: [
+    '../src/module',
+    '@nuxt/ui',
+  ],
+  ssr: false,
+  devtools: {
+    enabled: true,
+  },
+  css: [
+    '~/assets/css/main.css',
+  ],
   compatibilityDate: '2025-05-23',
   luxon: {
     templates: {

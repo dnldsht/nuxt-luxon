@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h1>nuxt-luxon</h1>
-
     <h2>formats</h2>
     <ul>
       <li
@@ -11,18 +9,11 @@
         {{ format }}: {{ $luxon(now, format) }}
       </li>
     </ul>
-
-    <h2>parse</h2>
-    <input
-      v-model="date"
-      type="date"
-    >
-    +2 days = {{ plusTwoDays }}
   </div>
 </template>
 
 <script setup lang="ts">
-const { $luxon, $lp } = useLuxon()
+const { $luxon } = useLuxon()
 
 const now = new Date()
 const formats = [
@@ -48,12 +39,4 @@ const formats = [
   'yyyy-MM-dd',
   'my_template',
 ]
-
-const date = ref(null)
-
-const plusTwoDays = computed(() => {
-  if (!date.value) return null
-  const parsedDate = $lp(date.value)
-  return $luxon(parsedDate.plus({ days: 2 }), 'yyyy-MM-dd')
-})
 </script>
