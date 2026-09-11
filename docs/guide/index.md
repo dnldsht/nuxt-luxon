@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     output: {
       format: 'short',
       zone: 'local',
-      locale: 'client',
+      locale: 'client', // environment locale, see the i18n guide
     },
     templates: {
       // Custom templates
@@ -45,6 +45,11 @@ export default defineNuxtConfig({
 ```
 
 That's it! The module is now installed and ready to use in your Nuxt application.
+
+::: tip Using `@nuxtjs/i18n`?
+Dates follow the language the user is browsing in, with no extra configuration.
+See [Internationalization](/guide/i18n).
+:::
 
 ## Usage
 

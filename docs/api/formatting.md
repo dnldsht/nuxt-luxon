@@ -9,8 +9,10 @@ Nuxt Luxon provides flexible formatting options through the `OutputOptions` inte
 ```ts
 import type { DateTimeFormatOptions, ToISOTimeOptions, ToRelativeOptions, ToSQLOptions, Zone } from 'luxon'
 
+type OutputLocale = 'i18n' | (string & {})
+
 interface OutputOptions {
-  locale?: string
+  locale?: OutputLocale
   format?: string | DateTimeFormatOptions | Intl.DateTimeFormatOptions
   relative?: ToRelativeOptions
   sql?: ToSQLOptions
@@ -26,7 +28,7 @@ interface OutputOptions {
   - **Template Name**: You can specify the name of a predefined template. Templates are predefined formats that can be used to quickly format dates and times. See [Templates](/guide/configuration#templates) for possible values.
   - **DateTimeFormatOptions**: Options for the DateTime format. See [DateTimeFormatOptions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) for possible values.
 
-- **locale**: The locale to use for formatting. If not set, the client's locale will be used.
+- **locale**: The locale to use for formatting, or `'i18n'` to follow [`@nuxtjs/i18n`](/guide/i18n). If not set, the locale of the environment is used.
 - **relative**: Options for the relative format. See [Relative](https://moment.github.io/luxon/api-docs/index.html#datetimetorelative) for possible values.
 - **sql**: Options for the SQL format. See [SQL](https://moment.github.io/luxon/api-docs/index.html#datetimetosql) for possible values.
 - **iso**: Options for the ISO format. See [ISO](https://moment.github.io/luxon/api-docs/index.html#datetimetoiso) for possible values.
@@ -53,7 +55,22 @@ Examples:
 - `de-AT`: German as used in Austria (primary language with country code)
 - `zh-Hans-CN`: Chinese written in simplified characters as used in China
 
-If not specified, the client's locale will be used by default.
+Beyond a plain language tag, two values are worth knowing:
+
+- `i18n` is resolved by the module to the locale of [`@nuxtjs/i18n`](/guide/i18n), at every format
+  call — so dates react to a language switch and are rendered in the right language on the server
+  as well.
+- `client` is not a real language tag: `Intl` ignores it and falls back to the locale of the
+  environment (the browser one on the client, the one of the node process during SSR). Leaving the
+  locale unset, or passing any other unrecognized value, does exactly the same.
+
+```ts
+const { $luxon } = useLuxon()
+
+$luxon(date, { format: 'full', locale: 'it' })     // '12 luglio 2024 alle ore 12:23 UTC'
+$luxon(date, { format: 'full', locale: 'i18n' })   // the language the user is browsing in
+$luxon(date, { format: 'full', locale: 'client' }) // the locale of the browser / server
+```
 
 ## Examples
 
@@ -153,6 +170,20 @@ $luxon('2024-07-12T12:23:49.000Z', {
   zone: 'Europe/Rome',
   locale: 'it'
 }) // '12 luglio 2024 alle ore 14:23 CEST'
+```
+
+### With the User Language
+
+With [`@nuxtjs/i18n`](/guide/i18n) installed, dates follow the active locale out of the box:
+
+```ts
+const { $luxon, luxon } = useLuxon()
+
+// formatted with the locale that is active right now
+$luxon('2024-07-12T12:23:49.000Z', 'full')
+
+// a computed ref: it updates by itself when the user switches language
+const date = luxon('2024-07-12T12:23:49.000Z', 'full')
 ```
 
 ### Using with Custom Input Format

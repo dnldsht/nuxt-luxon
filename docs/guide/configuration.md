@@ -41,7 +41,7 @@ Configure how dates are displayed by default:
 luxon: {
   output: {
     zone: 'local',       // Timezone for output
-    locale: 'client',     // Locale for formatting
+    locale: 'en-US',     // Locale for formatting (omit it to use the environment locale)
     format: 'short',      // Default format string
     relative: {...},      // See below for options
     iso: {...},           // See below for options
@@ -53,11 +53,30 @@ luxon: {
 | Option | Type | Description |
 |--------|------|-------------|
 | `zone` | `string` | Timezone to use for formatted output. Can be a string like 'UTC' |
-| `locale` | `string` | Locale to use for formatting (e.g., 'en-US', 'fr-FR'). |
+| `locale` | `string` | Locale to use for formatting (e.g., 'en-US', 'fr-FR'), or `'i18n'` to follow [`@nuxtjs/i18n`](/guide/i18n). Defaults to the [environment locale](/guide/i18n#default-locale). |
 | `format` | `string \| DateTimeFormatOptions \| Intl.DateTimeFormatOptions` | Format string or options object for date formatting. |
 | `relative` | `ToRelativeOptions` | Options for relative time formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetorelative) |
 | `sql` | `ToSQLOptions` | Options for SQL date formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetosql) |
 | `iso` | `ToISOTimeOptions` | Options for ISO date formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetoiso) |
+
+### Internationalization
+
+By default no locale is set, so dates are formatted with the locale of the environment: the browser
+one on the client, the one of the node process during SSR. The value `'client'` behaves the same way.
+
+Set an explicit locale to make the output predictable, or `'i18n'` to follow the user language —
+which is the default as soon as [`@nuxtjs/i18n`](https://i18n.nuxtjs.org) is registered:
+
+```ts
+luxon: {
+  output: {
+    locale: 'en-US', // a fixed locale
+    // locale: 'i18n', // ...or follow @nuxtjs/i18n
+  },
+}
+```
+
+See [Internationalization](/guide/i18n) for the whole story.
 
 ### Templates
 

@@ -16,6 +16,7 @@ Integrates the [Luxon library](https://moment.github.io/luxon/) with Nuxt 3, pro
 - 🕰️ Easy DateTime formatting & parsing with Luxon
 - 🧩 Predefined templates for common date formats
 - 🌐 Global date/time utilities via composables
+- 🌍 Follows the `@nuxtjs/i18n` locale, on the client and during SSR
 - 🎛️ Fully customizable via module options
 - 📝 Fully typed with TypeScript support
 - ✅ Fully tested for reliability
@@ -51,7 +52,7 @@ export default defineNuxtConfig({
     output: {
       format: 'short',
       zone: 'local',
-      locale: 'client',
+      locale: 'client', // environment locale, see the i18n guide
     },
     templates: {
       // Custom templates
@@ -85,6 +86,28 @@ const parsedDate = $lp('2025-05-10')
 const formattedDate = $luxon(parsedDate, 'full')
 </script>
 ```
+
+## Internationalization
+
+With [`@nuxtjs/i18n`](https://i18n.nuxtjs.org) installed, dates follow the language the user is
+browsing in — on the client and during server side rendering — without any extra configuration:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['nuxt-luxon', '@nuxtjs/i18n'],
+})
+```
+
+```vue
+<template>
+  <!-- en: July 12, 2024 at 12:23 PM UTC -->
+  <!-- it: 12 luglio 2024 alle ore 12:23 UTC -->
+  <p>{{ $luxon('2024-07-12T12:23:49.000Z', 'full') }}</p>
+</template>
+```
+
+An explicit `output.locale` always wins, and `locale: 'i18n'` can be set on a single template or
+call. See the [docs](https://nuxt-luxon.donld.me/guide/i18n) for details.
 
 ## Custom Templates
 

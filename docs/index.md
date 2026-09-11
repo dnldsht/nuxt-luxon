@@ -20,6 +20,9 @@ features:
   - icon: 🎛️
     title: Fully Customizable
     details: Create custom templates, set default timezones, locales, and more via module options
+  - icon: 🌍
+    title: i18n Ready
+    details: Dates follow the @nuxtjs/i18n locale, on the client and during SSR
   - icon: 📝
     title: TypeScript Support
     details: Fully typed API with TypeScript definitions for all features
