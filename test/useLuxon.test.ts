@@ -9,6 +9,8 @@ vi.mock('#app', () => ({
       luxon: DEFAULT_OPTIONS,
     },
   }),
+  // no @nuxtjs/i18n installed
+  tryUseNuxtApp: () => null,
 }))
 
 describe('useLuxon', () => {

@@ -2,6 +2,7 @@ import type { DateTime } from 'luxon'
 import type { ComputedRef, MaybeRefOrGetter } from 'vue'
 import type { ParseInput, FormatInputOptions, FormatOutputOptions, LuxonOptions } from '../types'
 import { makeFormatter, makeParser, makeReactiveFormatter, makeReactiveParser } from '../core'
+import { useI18nLocaleResolver } from '../i18n'
 
 import { useRuntimeConfig } from '#app'
 
@@ -18,8 +19,9 @@ export function useLuxon(): {
 
 export function useLuxon(value?: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) {
   const options = useRuntimeConfig().public.luxon as Required<LuxonOptions>
+  const resolveLocale = useI18nLocaleResolver()
 
-  const reactiveFormatter = makeReactiveFormatter(options)
+  const reactiveFormatter = makeReactiveFormatter(options, resolveLocale)
 
   if (value !== undefined) {
     return reactiveFormatter(value, outputFormat, inputFormat)
@@ -27,7 +29,7 @@ export function useLuxon(value?: MaybeRefOrGetter<ParseInput>, outputFormat?: Ma
 
   const reactiveParser = makeReactiveParser(options)
   const parser = makeParser(options)
-  const formatter = makeFormatter(options)
+  const formatter = makeFormatter(options, resolveLocale)
 
   return {
     luxon: reactiveFormatter,

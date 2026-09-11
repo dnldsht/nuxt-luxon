@@ -4,5 +4,7 @@
     "dist",
     "node_modules",
     "playground",
+    // fixtures are type-checked against their own generated `.nuxt` types, not the root one
+    "test/fixtures",
   ]
 }

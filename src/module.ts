@@ -1,6 +1,7 @@
-import { defineNuxtModule, createResolver, addImportsDir, addPlugin } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addImportsDir, addPlugin, hasNuxtModule } from '@nuxt/kit'
 import { DateTime } from 'luxon'
 import type { LuxonOptions } from './runtime/types'
+import { I18N_LOCALE } from './runtime/types'
 
 const templates = {
   full: { format: DateTime.DATETIME_FULL },
@@ -24,7 +25,7 @@ const templates = {
   times: { format: DateTime.TIME_WITH_SECONDS },
 }
 
-type ModuleOptions = LuxonOptions & { injectUtils?: boolean, useI18n?: boolean }
+export type ModuleOptions = LuxonOptions & { injectUtils?: boolean }
 
 export const DEFAULT_OPTIONS: ModuleOptions = {
   input: {
@@ -36,7 +37,6 @@ export const DEFAULT_OPTIONS: ModuleOptions = {
   },
   templates,
   injectUtils: true,
-  useI18n: false,
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -45,24 +45,17 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: 'luxon',
   },
   defaults: DEFAULT_OPTIONS,
-  moduleDependencies: {
-    '@nuxtjs/i18n': {
-      optional: true,
-      defaults: {
-        config: {
-          useI18n: true,
-        },
-      },
-    },
-  },
   setup(_options, _nuxt) {
     const { resolve } = createResolver(import.meta.url)
+
+    // follow the active @nuxtjs/i18n locale unless an explicit one was configured
+    if (!_options.output?.locale && hasNuxtModule('@nuxtjs/i18n', _nuxt)) {
+      _options.output = { ..._options.output, locale: I18N_LOCALE }
+    }
+
     // @ts-expect-error don't know how to type this
     _nuxt.options.runtimeConfig.public.luxon = _options
     addImportsDir(resolve('./runtime/composables'))
-    if (_options.output?.locale === 'i18n' || _options.useI18n) {
-      addPlugin(resolve('./runtime/plugins/luxon-vue-i18n'))
-    }
     if (_options.injectUtils) {
       addPlugin(resolve('./runtime/plugins/luxon-utils'))
     }

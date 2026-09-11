@@ -1,4 +1,4 @@
-import type { FormatInputOptions, FormatOutputOptions, LuxonOptions, ParseInput } from '../types'
+import type { FormatInputOptions, FormatOutputOptions, LocaleResolver, LuxonOptions, ParseInput } from '../types'
 import { toValue, computed, type MaybeRefOrGetter } from 'vue'
 import formatDateTime from './format'
 import parseInput from './parse'
@@ -8,11 +8,11 @@ export function makeParser(luxOptions: Required<LuxonOptions>) {
   return (value: MaybeRefOrGetter<ParseInput>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => parseInput(extendInput(luxOptions, toValue(value), toValue(inputFormat)))
 }
 
-export function makeFormatter(luxOptions: Required<LuxonOptions>) {
+export function makeFormatter(luxOptions: Required<LuxonOptions>, resolveLocale?: LocaleResolver) {
   const parser = makeParser(luxOptions)
   return (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => {
     const dt = parser(value, inputFormat)
-    return formatDateTime(dt, extendOutput(luxOptions, toValue(outputFormat)))
+    return formatDateTime(dt, extendOutput(luxOptions, toValue(outputFormat)), resolveLocale)
   }
 }
 
@@ -24,8 +24,8 @@ export function makeReactiveParser(options: Required<LuxonOptions>) {
   }
 }
 
-export function makeReactiveFormatter(options: Required<LuxonOptions>) {
-  const format = makeFormatter(options)
+export function makeReactiveFormatter(options: Required<LuxonOptions>, resolveLocale?: LocaleResolver) {
+  const format = makeFormatter(options, resolveLocale)
 
   return (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => {
     return computed(() => format(value, outputFormat, inputFormat))

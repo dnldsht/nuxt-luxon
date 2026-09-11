@@ -4,9 +4,4 @@ export default defineNuxtConfig({
   modules: [
     MyModule,
   ],
-  vite: {
-    build: {
-      target: 'esnext',
-    },
-  },
 })

@@ -1,51 +1,13 @@
 import type { DateTime } from 'luxon'
-import type { Ref } from 'vue'
-import type { OutputOptions } from '../types'
+import type { LocaleResolver, OutputOptions } from '../types'
+import { I18N_LOCALE } from '../types'
 
-type UseI18nCompat = () => { locale: Ref<string> }
-
-let luxonVueI18nUseI18n: UseI18nCompat | undefined
-
-/**
- * Called from the nuxt-luxon vue-i18n plugin (or manually in non-Nuxt setups)
- * so `locale: "i18n"` can resolve the active locale without eager `import('vue-i18n')` on module load.
- */
-export function setLuxonVueI18nUseI18n(useI18n: UseI18nCompat | undefined): void {
-  luxonVueI18nUseI18n = useI18n
-}
-
-let lastKnownLocale: string | null = null
-
-export default function format(dt: DateTime, options: OutputOptions) {
+export default function format(dt: DateTime, options: OutputOptions, resolveLocale?: LocaleResolver) {
   dt = dt.setZone(options.zone)
-  if (options.locale) {
-    if (options.locale === 'i18n') {
-      const useI18nFn = luxonVueI18nUseI18n
-      if (!useI18nFn) {
-        throw new Error('vue-i18n is not wired for nuxt-luxon. With Nuxt, install vue-i18n (e.g. @nuxtjs/i18n) and enabled `useI18n` in the module options or set `output.locale: "i18n"`.')
-      }
-      try {
-        const { locale } = useI18nFn()
-        if (import.meta.client) {
-          lastKnownLocale = locale.value
-        }
-      }
-      catch (error: unknown) {
-        if (typeof error === 'object' && error !== null && 'code' in error && (error as { code: number }).code === 26) {
-          // Must be called on top of setup, this happens if, for example, used in async function
-          // revert to last known locale
-        }
-        else {
-          throw error
-        }
-      }
-      if (import.meta.client && lastKnownLocale) {
-        dt = dt.setLocale(lastKnownLocale)
-      }
-    }
-    else {
-      dt = dt.setLocale(options.locale)
-    }
+
+  const locale = options.locale === I18N_LOCALE ? resolveLocale?.() : options.locale
+  if (locale) {
+    dt = dt.setLocale(locale)
   }
 
   if (typeof options.format === 'object') {

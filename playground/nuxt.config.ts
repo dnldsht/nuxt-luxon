@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   ],
   compatibilityDate: '2025-05-23',
   i18n: {
+    defaultLocale: 'en',
     locales: [
       {
         code: 'en',
@@ -36,9 +37,6 @@ export default defineNuxtConfig({
       my_template: {
         format: 'yyyy___MM______dd',
       },
-    },
-    output: {
-      locale: 'i18n',
     },
   },
 })
