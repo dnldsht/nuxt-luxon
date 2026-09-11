@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Nuxt Luxon"
-  tagline: "Effortless Date & Time Management in Nuxt, Powered by Luxon"
+  tagline: "Dates and times in Nuxt, handled by Luxon"
   actions:
     - theme: brand
       text: Get Started
@@ -18,19 +18,19 @@ features:
     title: Composable API
     details: Access date/time utilities with the useLuxon() composable
   - icon: 🎛️
-    title: Fully Customizable
-    details: Create custom templates, set default timezones, locales, and more via module options
+    title: Configurable
+    details: Set the default zone, locale and format in nuxt.config.ts, and name your own templates
   - icon: 🌍
     title: i18n Ready
     details: Dates follow the @nuxtjs/i18n locale, on the client and during SSR
   - icon: 📝
     title: TypeScript Support
-    details: Fully typed API with TypeScript definitions for all features
+    details: Type definitions ship with the module
   - icon: ✅
-    title: Fully Tested
-    details: Reliable date handling you can trust in your applications
+    title: Tested
+    details: Parsing, formatting and the i18n locale are covered on client and server
 
 ---
 ## 
-Nuxt Luxon brings the robust [Luxon library](https://moment.github.io/luxon/) to your Nuxt 3 projects, offering an intuitive and powerful way to manage all date and time requirements. Simplify everything from display formatting and parsing to timezone handling, all seamlessly integrated into your application.
+Nuxt Luxon wires [Luxon](https://moment.github.io/luxon/) into Nuxt. Format a date in a template with `$luxon`, parse one in a script with `$lp`, and set the zone, locale and format once in `nuxt.config.ts`.
 

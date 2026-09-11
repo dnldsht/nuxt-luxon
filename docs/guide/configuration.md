@@ -1,6 +1,6 @@
 # Configuration
 
-Nuxt Luxon provides various configuration options to customize its behavior. These options can be set in your `nuxt.config.ts` file.
+Every option lives under the `luxon` key in `nuxt.config.ts`.
 
 
 ```ts
@@ -64,8 +64,8 @@ luxon: {
 By default no locale is set, so dates are formatted with the locale of the environment: the browser
 one on the client, the one of the node process during SSR. The value `'client'` behaves the same way.
 
-Set an explicit locale to make the output predictable, or `'i18n'` to follow the user language —
-which is the default as soon as [`@nuxtjs/i18n`](https://i18n.nuxtjs.org) is registered:
+Set an explicit locale to make the output predictable, or `'i18n'` to follow the user language.
+`'i18n'` is the default as soon as [`@nuxtjs/i18n`](https://i18n.nuxtjs.org) is registered:
 
 ```ts
 luxon: {
@@ -76,11 +76,11 @@ luxon: {
 }
 ```
 
-See [Internationalization](/guide/i18n) for the whole story.
+See [Internationalization](/guide/i18n).
 
 ### Templates
 
-Templates let you define reusable date formatting configurations. These can be used for both parsing and formatting dates across your application.
+A template is a named set of output options. Use the name for parsing and for formatting.
 
 ```ts
 luxon: {
@@ -107,7 +107,7 @@ luxon: {
 }
 ```
 
-Each template accepts the same options as the `output` configuration. Templates can be used in both the `$luxon`/`$lf` and `$lp` functions:
+A template accepts the same options as `output`, and works in `$luxon`/`$lf` as well as `$lp`:
 
 ```vue
 <script setup>
@@ -121,7 +121,7 @@ const amsterdamTime = $luxon(new Date(), 'serverAMS')
 </script>
 ```
 
-By default there are these templates available:
+The module ships with these 20 templates:
 
 | format           | example _(with locale `en_US`)_                            |
 | ---------------- | ---------------------------------------------------------- |

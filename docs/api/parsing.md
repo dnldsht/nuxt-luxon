@@ -1,6 +1,6 @@
 # Parsing
 
-This section covers how to parse various date and time formats into a DateTime object using Nuxt Luxon.
+`$lp` turns a string, a number, a `Date` or a Luxon `DateTime` into a `DateTime`.
 
 ## Input Types
 
@@ -13,7 +13,7 @@ The input can be one of the following types:
 
 ## Input Options
 
-Along with the input, you can also specify the input format and zone.
+Along with the input, you can pass the format and the zone.
 
 ```ts
 import type { Zone } from 'luxon'
@@ -40,8 +40,6 @@ interface InputOptions {
 | *templateName* | see: [Templates](/guide/configuration#templates)         |                                                             |
 
 ## Examples
-
-Here are some examples of how to parse different types of inputs using the `$lp` function:
 
 ### Parsing String Inputs with Format Patterns
 

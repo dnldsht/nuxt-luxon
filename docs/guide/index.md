@@ -44,8 +44,6 @@ export default defineNuxtConfig({
 })
 ```
 
-That's it! The module is now installed and ready to use in your Nuxt application.
-
 ::: tip Using `@nuxtjs/i18n`?
 Dates follow the language the user is browsing in, with no extra configuration.
 See [Internationalization](/guide/i18n).
@@ -55,7 +53,7 @@ See [Internationalization](/guide/i18n).
 
 ### In Templates
 
-You can use the `$luxon` helper in your Vue templates to format dates:
+Use the `$luxon` helper to format dates:
 
 ```vue
 <template>
@@ -72,7 +70,7 @@ You can use the `$luxon` helper in your Vue templates to format dates:
 
 ### In JavaScript/TypeScript
 
-For more advanced usage, you can access all the utilities via the `useLuxon` composable:
+The `useLuxon` composable returns the same helpers, plus the parser:
 
 ```vue
 <script setup>

@@ -1,10 +1,10 @@
 # Formatting
 
-This section covers how to format DateTime objects into various string representations using Nuxt Luxon.
+`$luxon` turns a date into a string, through a template name, a token string, or an options object.
 
 ## Output Options
 
-Nuxt Luxon provides flexible formatting options through the `OutputOptions` interface:
+Formatting reads the `OutputOptions` interface:
 
 ```ts
 import type { DateTimeFormatOptions, ToISOTimeOptions, ToRelativeOptions, ToSQLOptions, Zone } from 'luxon'
@@ -23,19 +23,19 @@ interface OutputOptions {
 
 ## Format Options
 
-- **format**: The format to use for formatting.
-  - **Set of Tokens**: You can use a set of tokens to define the output format. Tokens represent different parts of the date and time, such as year, month, day, hour, minute, etc. See [Tokens](/api/tokens) for possible values.
-  - **Template Name**: You can specify the name of a predefined template. Templates are predefined formats that can be used to quickly format dates and times. See [Templates](/guide/configuration#templates) for possible values.
-  - **DateTimeFormatOptions**: Options for the DateTime format. See [DateTimeFormatOptions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat) for possible values.
+- **format**: how to render the date.
+  - **Set of tokens**: each token stands for a part of the date, like the year, the month or the hour. See [Tokens](/api/tokens).
+  - **Template name**: the name of a built-in or custom template. See [Templates](/guide/configuration#templates).
+  - **DateTimeFormatOptions**: an options object for `Intl`. See [DateTimeFormatOptions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat).
 
-- **locale**: The locale to use for formatting, or `'i18n'` to follow [`@nuxtjs/i18n`](/guide/i18n). If not set, the locale of the environment is used.
+- **locale**: the locale to format with, or `'i18n'` to follow [`@nuxtjs/i18n`](/guide/i18n). Left unset, Luxon uses the locale of the environment.
 - **relative**: Options for the relative format. See [Relative](https://moment.github.io/luxon/api-docs/index.html#datetimetorelative) for possible values.
 - **sql**: Options for the SQL format. See [SQL](https://moment.github.io/luxon/api-docs/index.html#datetimetosql) for possible values.
 - **iso**: Options for the ISO format. See [ISO](https://moment.github.io/luxon/api-docs/index.html#datetimetoiso) for possible values.
 
 ## Zone {#zone}
 
-The `zone` option allows you to specify the timezone for the formatted output.
+`zone` sets the timezone of the output.
 
 Examples:
 - `UTC`
@@ -43,11 +43,11 @@ Examples:
 - `Asia/Tokyo`
 - `local` (for the system's local zone)
 
-For a comprehensive list of timezone identifiers, refer to the [list on Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+Full list of timezone identifiers: [tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
 ## Locale {#locale}
 
-The `locale` option determines the language and regional formatting rules to use.
+`locale` sets the language and the regional formatting rules.
 
 Examples:
 - `en`: English (primary language)
@@ -55,14 +55,13 @@ Examples:
 - `de-AT`: German as used in Austria (primary language with country code)
 - `zh-Hans-CN`: Chinese written in simplified characters as used in China
 
-Beyond a plain language tag, two values are worth knowing:
+Beyond a plain language tag, two values behave specially:
 
-- `i18n` is resolved by the module to the locale of [`@nuxtjs/i18n`](/guide/i18n), at every format
-  call — so dates react to a language switch and are rendered in the right language on the server
-  as well.
+- The module resolves `i18n` to the locale of [`@nuxtjs/i18n`](/guide/i18n) at every format call, so
+  dates react to a language switch and come out in the right language on the server too.
 - `client` is not a real language tag: `Intl` ignores it and falls back to the locale of the
   environment (the browser one on the client, the one of the node process during SSR). Leaving the
-  locale unset, or passing any other unrecognized value, does exactly the same.
+  locale unset, or passing any other unrecognized value, does the same.
 
 ```ts
 const { $luxon } = useLuxon()
@@ -174,7 +173,7 @@ $luxon('2024-07-12T12:23:49.000Z', {
 
 ### With the User Language
 
-With [`@nuxtjs/i18n`](/guide/i18n) installed, dates follow the active locale out of the box:
+With [`@nuxtjs/i18n`](/guide/i18n) installed, dates follow the active locale:
 
 ```ts
 const { $luxon, luxon } = useLuxon()
