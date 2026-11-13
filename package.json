@@ -5,7 +5,7 @@
   "author": "Donald Shtjefni <dnld.sht@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/dnldsht/nuxt-luxon.git"
+    "url": "git+https://github.com/dnldsht/nuxt-luxon.git"
   },
   "keywords": [
     "vue",
@@ -44,7 +44,6 @@
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
-    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest watch",
@@ -77,7 +76,6 @@
     "@types/luxon": "^3.7.1",
     "@types/node": "^24.9.1",
     "@vitest/coverage-v8": "4.0.2",
-    "changelogen": "^0.6.2",
     "defu": "^6.1.4",
     "eslint": "^9.38.0",
     "nuxt": "^4.1.3",
