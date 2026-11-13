@@ -1,10 +1,13 @@
 import type { DateTime } from 'luxon'
-import type { OutputOptions } from '../types'
+import type { LocaleResolver, OutputOptions } from '../types'
+import { I18N_LOCALE } from '../types'
 
-export default function format(dt: DateTime, options: OutputOptions) {
+export default function format(dt: DateTime, options: OutputOptions, resolveLocale?: LocaleResolver) {
   dt = dt.setZone(options.zone)
-  if (options.locale) {
-    dt = dt.setLocale(options.locale)
+
+  const locale = options.locale === I18N_LOCALE ? resolveLocale?.() : options.locale
+  if (locale) {
+    dt = dt.setLocale(locale)
   }
 
   if (typeof options.format === 'object') {

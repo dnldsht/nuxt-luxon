@@ -2,23 +2,23 @@
 
 ## useLuxon
 
-The `useLuxon` composable provides convenient access to Luxon's date-time functionality with the configured options for your Nuxt application.
+`useLuxon` formats and parses dates with the options you configured in `nuxt.config.ts`.
 
 ### Parameters
 
-- `value` (optional): The date-time input to be formatted. Can be a string, Date object, or other valid input that Luxon can parse.
-- `outputFormat` (optional): The format to output the date-time in. Can be a predefined format string or a custom format.
-- `inputFormat` (optional): Format options to use when parsing the input value.
+- `value` (optional): the date-time to format. A string, a number, a `Date`, or a Luxon `DateTime`.
+- `outputFormat` (optional): a template name, a token string, or an options object.
+- `inputFormat` (optional): the format options for parsing the input.
 
 ### Return Value
 
 The return value depends on how you call the composable:
 
-- When called with a `value`: Returns the formatted date-time string
-- When called without arguments: Returns an object containing:
-  - `$luxon`: The formatting function
-  - `$lf`: Alias for the formatting function
-  - `$lp`: The parsing function
+- with a `value`: the formatted date-time string
+- without arguments: an object holding
+  - `$luxon`: the formatting function
+  - `$lf`: alias of `$luxon`
+  - `$lp`: the parsing function
 
 ### Basic Usage
 
@@ -41,7 +41,7 @@ const dateObject = $lp('January 1, 2023', 'MMMM d, yyyy')
 
 ### Advanced Usage
 
-You can use the composable with custom format options:
+Pass an options object instead of a format name:
 
 ```ts
 // Custom output format

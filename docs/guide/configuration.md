@@ -1,6 +1,6 @@
 # Configuration
 
-Nuxt Luxon provides various configuration options to customize its behavior. These options can be set in your `nuxt.config.ts` file.
+Every option lives under the `luxon` key in `nuxt.config.ts`.
 
 
 ```ts
@@ -41,7 +41,7 @@ Configure how dates are displayed by default:
 luxon: {
   output: {
     zone: 'local',       // Timezone for output
-    locale: 'client',     // Locale for formatting
+    locale: 'en-US',     // Locale for formatting (omit it to use the environment locale)
     format: 'short',      // Default format string
     relative: {...},      // See below for options
     iso: {...},           // See below for options
@@ -53,15 +53,34 @@ luxon: {
 | Option | Type | Description |
 |--------|------|-------------|
 | `zone` | `string` | Timezone to use for formatted output. Can be a string like 'UTC' |
-| `locale` | `string` | Locale to use for formatting (e.g., 'en-US', 'fr-FR'). |
+| `locale` | `string` | Locale to use for formatting (e.g., 'en-US', 'fr-FR'), or `'i18n'` to follow [`@nuxtjs/i18n`](/guide/i18n). Defaults to the [environment locale](/guide/i18n#default-locale). |
 | `format` | `string \| DateTimeFormatOptions \| Intl.DateTimeFormatOptions` | Format string or options object for date formatting. |
 | `relative` | `ToRelativeOptions` | Options for relative time formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetorelative) |
 | `sql` | `ToSQLOptions` | Options for SQL date formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetosql) |
 | `iso` | `ToISOTimeOptions` | Options for ISO date formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetoiso) |
 
+### Internationalization
+
+By default no locale is set, so dates are formatted with the locale of the environment: the browser
+one on the client, the one of the node process during SSR. The value `'client'` behaves the same way.
+
+Set an explicit locale to make the output predictable, or `'i18n'` to follow the user language.
+`'i18n'` is the default as soon as [`@nuxtjs/i18n`](https://i18n.nuxtjs.org) is registered:
+
+```ts
+luxon: {
+  output: {
+    locale: 'en-US', // a fixed locale
+    // locale: 'i18n', // ...or follow @nuxtjs/i18n
+  },
+}
+```
+
+See [Internationalization](/guide/i18n).
+
 ### Templates
 
-Templates let you define reusable date formatting configurations. These can be used for both parsing and formatting dates across your application.
+A template is a named set of output options. Use the name for parsing and for formatting.
 
 ```ts
 luxon: {
@@ -88,7 +107,7 @@ luxon: {
 }
 ```
 
-Each template accepts the same options as the `output` configuration. Templates can be used in both the `$luxon`/`$lf` and `$lp` functions:
+A template accepts the same options as `output`, and works in `$luxon`/`$lf` as well as `$lp`:
 
 ```vue
 <script setup>
@@ -102,7 +121,7 @@ const amsterdamTime = $luxon(new Date(), 'serverAMS')
 </script>
 ```
 
-By default there are these templates available:
+The module ships with these 20 templates:
 
 | format           | example _(with locale `en_US`)_                            |
 | ---------------- | ---------------------------------------------------------- |

@@ -5,7 +5,7 @@
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-Integrates the [Luxon library](https://moment.github.io/luxon/) with Nuxt 3, providing a simple and powerful way to work with dates and times in your Nuxt application.
+Wires [Luxon](https://moment.github.io/luxon/) into Nuxt: format a date in a template with `$luxon`, parse one in a script with `$lp`, and set the zone, locale and format once in `nuxt.config.ts`.
 
 - [📚 &nbsp;Docs](https://nuxt-luxon.donld.me)
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
@@ -13,12 +13,12 @@ Integrates the [Luxon library](https://moment.github.io/luxon/) with Nuxt 3, pro
 
 ## Features
 
-- 🕰️ Easy DateTime formatting & parsing with Luxon
-- 🧩 Predefined templates for common date formats
-- 🌐 Global date/time utilities via composables
-- 🎛️ Fully customizable via module options
-- 📝 Fully typed with TypeScript support
-- ✅ Fully tested for reliability
+- 🕰️ Formatting and parsing through Luxon
+- 🧩 20 built-in templates, plus the ones you name yourself
+- 🌐 `$luxon` in templates, `useLuxon()` in scripts
+- 🌍 Follows the `@nuxtjs/i18n` locale, on the client and during SSR
+- 🎛️ Defaults for zone, locale and format set in `nuxt.config.ts`
+- 📝 Types ship with the module
 
 ## Installation
 
@@ -51,7 +51,7 @@ export default defineNuxtConfig({
     output: {
       format: 'short',
       zone: 'local',
-      locale: 'client',
+      locale: 'client', // environment locale, see the i18n guide
     },
     templates: {
       // Custom templates
@@ -86,9 +86,31 @@ const formattedDate = $luxon(parsedDate, 'full')
 </script>
 ```
 
+## Internationalization
+
+With [`@nuxtjs/i18n`](https://i18n.nuxtjs.org) installed, dates follow the language the user is
+browsing in, on the client and during server side rendering. Nothing else to configure:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['nuxt-luxon', '@nuxtjs/i18n'],
+})
+```
+
+```vue
+<template>
+  <!-- en: July 12, 2024 at 12:23 PM UTC -->
+  <!-- it: 12 luglio 2024 alle ore 12:23 UTC -->
+  <p>{{ $luxon('2024-07-12T12:23:49.000Z', 'full') }}</p>
+</template>
+```
+
+An explicit `output.locale` always wins, and you can set `locale: 'i18n'` on a single template or
+call. See the [docs](https://nuxt-luxon.donld.me/guide/i18n).
+
 ## Custom Templates
 
-Templates can be used for both parsing and formatting dates. This is especially useful when you need consistent date formats across your application or when working with specific regional formats.
+A template names a set of options once and works for both parsing and formatting, so a date looks the same everywhere in the app.
 
 ```ts
 export default defineNuxtConfig({
@@ -112,7 +134,7 @@ export default defineNuxtConfig({
 })
 ```
 
-Then you can use these templates for both parsing and formatting:
+Use the name wherever a format goes:
 
 ```vue
 <script setup>
@@ -130,7 +152,7 @@ const amsterdamTime = $luxon(new Date(), 'serverAMS')
 
 ### Composable: `useLuxon()`
 
-The main composable that provides formatting and parsing utilities:
+Returns the formatting and parsing helpers:
 
 ```ts
 const { $luxon, $lf, $lp } = useLuxon()
@@ -141,7 +163,7 @@ const { $luxon, $lf, $lp } = useLuxon()
 
 ### Formatting: `$luxon(value, format?, inputFormat?)`
 
-Format a date value using the specified format:
+Formats a date value:
 
 ```ts
 // Basic usage with predefined formats
@@ -158,7 +180,7 @@ $luxon('05/10/2025', 'full', 'MM/dd/yyyy')
 
 ### Parsing: `$lp(value, format?)`
 
-Parse a value into a Luxon DateTime object:
+Parses a value into a Luxon DateTime object:
 
 ```ts
 // Parse from various formats
@@ -172,7 +194,7 @@ const custom = $lp('05/10/2025', 'MM/dd/yyyy')
 
 ### Built-in Templates
 
-The module includes several predefined format templates:
+The module ships with 20 templates:
 
 | Name | Description | Example |
 |------|-------------|---------|
@@ -189,7 +211,7 @@ The module includes several predefined format templates:
 
 ## TypeScript Support
 
-This module includes TypeScript definitions for all features.
+Type definitions ship with the module. No `@types` package to install.
 
 ## License
 

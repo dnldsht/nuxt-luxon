@@ -1,5 +1,19 @@
 <template>
   <div>
+    <h1>nuxt-luxon</h1>
+    <div class="language-selector">
+      <select v-model="selectedLocale">
+        <option
+          v-for="loc in locales"
+          :key="loc.code"
+          :value="loc.code"
+        >
+          {{ loc.name }}
+        </option>
+      </select>
+      {{ $t('current_locale') }}: {{ locale }}
+    </div>
+
     <h2>formats</h2>
     <ul>
       <li
@@ -15,6 +29,12 @@
 <script setup lang="ts">
 const { $luxon } = useLuxon()
 
+const { locale, locales, setLocale } = useI18n()
+
+const selectedLocale = ref(locale.value)
+watch(selectedLocale, (newLocale) => {
+  setLocale(newLocale)
+})
 const now = new Date()
 const formats = [
   'full',

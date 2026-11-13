@@ -1,8 +1,6 @@
 # Tokens
 
-Tokens are useful for formatting and parsing.
-
-You can use the following tokens:
+Tokens work in format strings and in parse strings.
 
 | Standalone token | Format token | Description                                                  | Example                                                     |
 | ---------------- | ------------ | ------------------------------------------------------------ | ----------------------------------------------------------- |
@@ -70,4 +68,4 @@ You can use the following tokens:
 | q                |              | quarter, no padding                                          | 9                                                           |
 | qq               |              | quarter, padded to 2                                         | 13                                                          |
 
-Full list of tokens can be found [here](https://moment.github.io/luxon/#/formatting?id=table-of-tokens)
+Full list of tokens: [Luxon documentation](https://moment.github.io/luxon/#/formatting?id=table-of-tokens).
