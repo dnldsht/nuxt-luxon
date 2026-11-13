@@ -1,6 +1,20 @@
 # Changelog
 
 
+## [1.3.0](https://github.com/dnldsht/nuxt-luxon/compare/v1.2.0...v1.3.0) (2026-11-13)
+
+
+### Features
+
+* accept also ref & getters as input value ([f261655](https://github.com/dnldsht/nuxt-luxon/commit/f261655c3fa03d30cde89406e70fc4dd45ecba44))
+* follow the @nuxtjs/i18n locale ([#4](https://github.com/dnldsht/nuxt-luxon/issues/4)) ([c8a1b81](https://github.com/dnldsht/nuxt-luxon/commit/c8a1b81166007a76e5e023f310d9b7bcf3358da9))
+* output as ref ([27c369e](https://github.com/dnldsht/nuxt-luxon/commit/27c369eea09a59f03d0ddba80894e8afb02cb5e2))
+
+
+### Bug Fixes
+
+* types MaybeRefOrGetter ([fb0e431](https://github.com/dnldsht/nuxt-luxon/commit/fb0e4317878b4d860ea88f984ee77beb7ff0dbd8))
+
 ## v1.2.0
 
 [compare changes](https://github.com/dnldsht/nuxt-luxon/compare/v1.1.1...v1.2.0)
@@ -83,4 +97,3 @@
 ### ❤️ Contributors
 
 - Donald Shtjefni ([@dnldsht](https://github.com/dnldsht))
-
