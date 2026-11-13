@@ -1,6 +1,13 @@
 # Changelog
 
 
+## [1.3.1](https://github.com/dnldsht/nuxt-luxon/compare/v1.3.0...v1.3.1) (2026-11-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([4477789](https://github.com/dnldsht/nuxt-luxon/commit/4477789ad4818c5ca5b6ba475bec1f7811a3196d))
+
 ## [1.3.0](https://github.com/dnldsht/nuxt-luxon/compare/v1.2.0...v1.3.0) (2026-11-13)
 
 
