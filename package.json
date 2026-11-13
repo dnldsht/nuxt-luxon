@@ -20,7 +20,7 @@
     "parse"
   ],
   "license": "MIT",
-  "packageManager": "pnpm@11.1.1",
+  "packageManager": "pnpm@12.18.0",
   "type": "module",
   "exports": {
     ".": {
