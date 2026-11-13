@@ -3,4 +3,8 @@
     "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
+  "i18n-ally.localesPaths": [
+    "playground/i18n",
+    "playground/i18n/locales"
+  ],
 }
