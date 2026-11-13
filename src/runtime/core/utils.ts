@@ -11,7 +11,7 @@ export function extendInput(luxOptions: Required<LuxonOptions>, value: ParseInpu
   let template: Partial<InputOptions> | undefined
 
   if (typeof options.format === 'string' && options.format in luxOptions.templates) {
-    const { format: templateFormat, ...rest } = luxOptions.templates[options.format as keyof typeof luxOptions.templates]
+    const { format: templateFormat, ...rest } = luxOptions.templates[options.format as keyof typeof luxOptions.templates]!
     template = {
       ...rest,
       ...(templateFormat && typeof templateFormat === 'string' && { format: templateFormat }),

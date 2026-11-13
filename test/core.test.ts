@@ -7,7 +7,12 @@ import type { LuxonOptions } from '../src/runtime/types'
 
 function init(_options: LuxonOptions = {}) {
   const options = defu(_options, DEFAULT_OPTIONS) as Required<LuxonOptions>
-  const $luxon = makeFormatter(options)
+  const format = makeFormatter(options)
+  // ICU versions differ on the space before AM/PM (U+202F or a plain space): compare plain spaces
+  const $luxon = ((...args: Parameters<typeof format>) => {
+    const out = format(...args)
+    return typeof out === 'string' ? out.replace(/ /g, ' ') : out
+  }) as typeof format
   const $lp = makeParser(options)
   return { $luxon, $lp }
 }
@@ -23,15 +28,15 @@ describe('datetimes', () => {
 
     const date = '2024-07-12T12:23:49.000Z'
     const outputs = [
-      { format: undefined, expected: '7/12/2024, 12:23 PM' },
-      { format: 'full', expected: 'July 12, 2024 at 12:23 PM UTC' },
-      { format: 'fulls', expected: 'July 12, 2024 at 12:23:49 PM UTC' },
-      { format: 'huge', expected: 'Friday, July 12, 2024 at 12:23 PM UTC' },
-      { format: 'huges', expected: 'Friday, July 12, 2024 at 12:23:49 PM UTC' },
-      { format: 'med', expected: 'Jul 12, 2024, 12:23 PM' },
-      { format: 'meds', expected: 'Jul 12, 2024, 12:23:49 PM' },
-      { format: 'short', expected: '7/12/2024, 12:23 PM' },
-      { format: 'shorts', expected: '7/12/2024, 12:23:49 PM' },
+      { format: undefined, expected: '7/12/2024, 12:23 PM' },
+      { format: 'full', expected: 'July 12, 2024 at 12:23 PM UTC' },
+      { format: 'fulls', expected: 'July 12, 2024 at 12:23:49 PM UTC' },
+      { format: 'huge', expected: 'Friday, July 12, 2024 at 12:23 PM UTC' },
+      { format: 'huges', expected: 'Friday, July 12, 2024 at 12:23:49 PM UTC' },
+      { format: 'med', expected: 'Jul 12, 2024, 12:23 PM' },
+      { format: 'meds', expected: 'Jul 12, 2024, 12:23:49 PM' },
+      { format: 'short', expected: '7/12/2024, 12:23 PM' },
+      { format: 'shorts', expected: '7/12/2024, 12:23:49 PM' },
       { format: 'date_full', expected: 'July 12, 2024' },
       { format: 'date_huge', expected: 'Friday, July 12, 2024' },
       { format: 'date_med', expected: 'Jul 12, 2024' },
@@ -40,8 +45,8 @@ describe('datetimes', () => {
       { format: 'time24', expected: '12:23' },
       { format: 'time24longoffset', expected: '12:23:49 UTC' },
       { format: 'time24s', expected: '12:23:49' },
-      { format: 'time', expected: '12:23 PM' },
-      { format: 'times', expected: '12:23:49 PM' },
+      { format: 'time', expected: '12:23 PM' },
+      { format: 'times', expected: '12:23:49 PM' },
       { format: 'iso', expected: '2024-07-12T12:23:49.000Z' },
       { format: 'sql', expected: '2024-07-12 12:23:49.000 Z' },
       { format: 'http', expected: 'Fri, 12 Jul 2024 12:23:49 GMT' },
@@ -59,7 +64,7 @@ describe('datetimes', () => {
     expect(($luxon(date, 'jsdate') as Date).getTime()).toBe(new Date(1720787029 * 1000).getTime())
     expect($luxon(date, 'relative')).toMatch('ago')
     // @ts-expect-error testing invalid input where format is a number
-    expect(() => $luxon(date, { format: 1 })).toThrowError(TypeError)
+    expect(() => $luxon(date, { format: 1 })).toThrow(TypeError)
   })
 
   it('format with locale', () => {
@@ -185,23 +190,23 @@ describe('parse', () => {
       { format: 'luxon', value: DateTime.fromObject({ year: 2024, month: 7, day: 12 }, { zone: 'utc' }) },
     ]
 
-    expect(() => $lp('2024-07-12', { format: 'jsdate' })).toThrowError(TypeError)
+    expect(() => $lp('2024-07-12', { format: 'jsdate' })).toThrow(TypeError)
     // @ts-expect-error testing invalid input: null is not a valid ParseInput
-    expect(() => $lp(null, { format: 'jsdate' })).toThrowError(TypeError)
+    expect(() => $lp(null, { format: 'jsdate' })).toThrow(TypeError)
 
-    expect(() => $lp('2024-07-12', { format: 'millis' })).toThrowError(TypeError)
+    expect(() => $lp('2024-07-12', { format: 'millis' })).toThrow(TypeError)
     // @ts-expect-error testing invalid input: null is not a valid ParseInput
-    expect(() => $lp(null, { format: 'millis' })).toThrowError(TypeError)
+    expect(() => $lp(null, { format: 'millis' })).toThrow(TypeError)
 
-    expect(() => $lp('2024-07-12', { format: 'seconds' })).toThrowError(TypeError)
+    expect(() => $lp('2024-07-12', { format: 'seconds' })).toThrow(TypeError)
     // @ts-expect-error testing invalid input: null is not a valid ParseInput
-    expect(() => $lp(null, { format: 'seconds' })).toThrowError(TypeError)
+    expect(() => $lp(null, { format: 'seconds' })).toThrow(TypeError)
 
     // @ts-expect-error testing invalid input: format option value must be a string, not a number
-    expect(() => $lp('2024-07-12', { format: 0 })).toThrowError(TypeError)
-    expect(() => $lp(0, { format: 'short' })).toThrowError(TypeError) // Assuming 0 is not a valid ParseInput here
+    expect(() => $lp('2024-07-12', { format: 0 })).toThrow(TypeError)
+    expect(() => $lp(0, { format: 'short' })).toThrow(TypeError) // Assuming 0 is not a valid ParseInput here
     // @ts-expect-error testing invalid input: null is not a valid ParseInput
-    expect(() => $lp(null, { format: 'short' })).toThrowError(TypeError)
+    expect(() => $lp(null, { format: 'short' })).toThrow(TypeError)
 
     for (const { format, value } of formats) {
       expect($lp(value, { format }).toISODate(), format).toBe(date)
