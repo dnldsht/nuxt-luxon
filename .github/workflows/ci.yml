@@ -49,3 +49,34 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+  nuxt3:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pack module
+        run: pnpm run dev:prepare && pnpm pack --out test/fixtures/nuxt3/nuxt-luxon.tgz
+
+      - name: Build and typecheck on Nuxt 3
+        working-directory: test/fixtures/nuxt3
+        run: pnpm install --no-frozen-lockfile && pnpm build && pnpm typecheck
+
+      - name: Check SSR output
+        working-directory: test/fixtures/nuxt3
+        run: |
+          PORT=3000 pnpm start &
+          curl -s --retry 20 --retry-connrefused --retry-delay 1 localhost:3000 > page.html
+          grep -qF '<div>15 marzo 2024</div>' page.html
+          grep -qF '<div>2024-03-15</div>' page.html

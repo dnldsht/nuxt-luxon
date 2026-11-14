@@ -57,3 +57,7 @@ Temporary Items
 
 docs/.vitepress/cache
 
+
+# packed module installed by test/fixtures/nuxt3
+test/fixtures/nuxt3/nuxt-luxon.tgz
+test/fixtures/nuxt3/pnpm-lock.yaml

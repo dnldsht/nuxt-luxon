@@ -1,0 +1,4 @@
+# standalone: installs the packed module like a real Nuxt 3 user would (see ci.yml)
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true

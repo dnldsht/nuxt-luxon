@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "nuxt3",
+  "type": "module",
+  "scripts": {
+    "build": "nuxi build",
+    "typecheck": "nuxi typecheck",
+    "start": "node .output/server/index.mjs"
+  },
+  "dependencies": {
+    "@nuxtjs/i18n": "^9.0.0",
+    "nuxt": "^3.0.0",
+    "nuxt-luxon": "file:./nuxt-luxon.tgz"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vue-tsc": "^3.3.14"
+  }
+}
