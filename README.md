@@ -14,7 +14,7 @@ Wires [Luxon](https://moment.github.io/luxon/) into Nuxt: format a date in a tem
 ## Features
 
 - 🕰️ Formatting and parsing through Luxon
-- 🧩 20 built-in templates, plus the ones you name yourself
+- 🧩 19 built-in templates, plus the ones you name yourself
 - 🌐 `$luxon` in templates, `useLuxon()` in scripts
 - 🌍 Follows the `@nuxtjs/i18n` locale, on the client and during SSR
 - 🎛️ Defaults for zone, locale and format set in `nuxt.config.ts`
@@ -39,23 +39,9 @@ Add `nuxt-luxon` to the `modules` section of your `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  modules: [
-    'nuxt-luxon', // Add the module here
-  ],
-  // Default options
+  modules: ['nuxt-luxon'],
   luxon: {
-    input: {
-      zone: 'utc',
-      format: 'iso',
-    },
-    output: {
-      format: 'short',
-      zone: 'local',
-      locale: 'client', // environment locale, see the i18n guide
-    },
-    templates: {
-      // Custom templates
-    },
+    output: { zone: 'Europe/Rome', locale: 'it' }, // optional
   },
 })
 ```

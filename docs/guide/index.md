@@ -1,9 +1,14 @@
+# Getting started
 
-# Get Started with Nuxt Luxon
+Nuxt Luxon adds [Luxon](https://moment.github.io/luxon/) to your Nuxt app as two helpers: `$luxon` formats a date, `$lp` parses one into a Luxon `DateTime`. You configure the zone, locale and format once in `nuxt.config.ts`.
 
-## Installation
+## Install
 
 ::: code-group
+```bash [pnpm]
+pnpm add nuxt-luxon
+```
+
 ```bash [npm]
 npm install nuxt-luxon
 ```
@@ -11,78 +16,62 @@ npm install nuxt-luxon
 ```bash [yarn]
 yarn add nuxt-luxon
 ```
-
-```bash [pnpm]
-pnpm add nuxt-luxon
-```
 :::
 
-## Setup
-
-Add `nuxt-luxon` to the `modules` section of your `nuxt.config.ts`:
+Add the module to `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  modules: [
-    'nuxt-luxon', // Add the module here
-  ],
-  // Default options
-  luxon: {
-    input: {
-      zone: 'utc',
-      format: 'iso',
-    },
-    output: {
-      format: 'short',
-      zone: 'local',
-      locale: 'client', // environment locale, see the i18n guide
-    },
-    templates: {
-      // Custom templates
-    },
-  },
+  modules: ['nuxt-luxon'],
 })
 ```
 
-::: tip Using `@nuxtjs/i18n`?
-Dates follow the language the user is browsing in, with no extra configuration.
-See [Internationalization](/guide/i18n).
+With no options, the module reads strings as ISO dates in UTC and prints them with the `short` template, in the zone and locale of the browser.
+
+::: tip Using @nuxtjs/i18n?
+Dates follow the active language with no extra setup. See [Internationalization](/guide/i18n).
 :::
 
-## Usage
+## Format in a template
 
-### In Templates
-
-Use the `$luxon` helper to format dates:
+`$luxon` is available in every template:
 
 ```vue
 <template>
-  <div>
-    <!-- Format dates with predefined templates -->
-    <p>Today (short): {{ $luxon(new Date(), 'short') }}</p>
-    <p>Today (full): {{ $luxon(new Date(), 'full') }}</p>
-    
-    <!-- Custom format strings -->
-    <p>Custom format: {{ $luxon(new Date(), 'yyyy-MM-dd') }}</p>
-  </div>
+  <p>{{ $luxon(post.publishedAt) }}</p>
+  <!-- 7/12/2024, 12:23 PM -->
+
+  <p>{{ $luxon(post.publishedAt, 'date_full') }}</p>
+  <!-- July 12, 2024 -->
+
+  <p>{{ $luxon(post.publishedAt, 'yyyy-MM-dd') }}</p>
+  <!-- 2024-07-12 -->
 </template>
 ```
 
-### In JavaScript/TypeScript
+The second argument takes a [template name](/api/formatting#templates), a string of [tokens](/api/tokens) or an [options object](/api/formatting#output-options).
 
-The `useLuxon` composable returns the same helpers, plus the parser:
+## Format and parse in a script
+
+`useLuxon()` returns the same helpers:
 
 ```vue
-<script setup>
-// Import the composable
+<script setup lang="ts">
 const { $luxon, $lp } = useLuxon()
 
-// Parse dates
-const parsedDate = $lp('2025-05-10')
-console.log(parsedDate.toISO()) // '2025-05-10T00:00:00.000Z'
-
-// Format dates
-const formattedDate = $luxon(parsedDate, 'full')
-console.log(formattedDate) // 'May 10, 2025, 12:00 PM UTC'
+const due = $lp('12/07/2024', 'dd/MM/yyyy').plus({ days: 30 })
+$luxon(due, 'date_med') // 'Aug 11, 2024'
 </script>
 ```
+
+Pass a value to get a computed ref back. It updates when the value or the locale changes:
+
+```ts
+const label = useLuxon(() => post.value.publishedAt, 'date_med')
+```
+
+## Next steps
+
+- [Configuration](/guide/configuration): default zone, locale and format, and your own templates.
+- [Formatting](/api/formatting): every built-in template with its output.
+- [Parsing](/api/parsing): reading SQL, HTTP, timestamps and custom strings.

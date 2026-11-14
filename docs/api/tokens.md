@@ -1,6 +1,8 @@
 # Tokens
 
-Tokens work in format strings and in parse strings.
+Tokens are the letters in a pattern like `dd/MM/yyyy`. The same tokens work for `$luxon` and `$lp`. Wrap literal text in single quotes: `"'Week' W"`.
+
+Some tokens have a format variant in the second column. In languages like Polish, a month name changes form inside a date: with `locale: 'pl'`, `LLLL` prints *lipiec* and `d MMMM` prints *12 lipca*. Use the standalone token for a lone month or weekday and the format token inside a date.
 
 | Standalone token | Format token | Description                                                  | Example                                                     |
 | ---------------- | ------------ | ------------------------------------------------------------ | ----------------------------------------------------------- |
@@ -8,7 +10,7 @@ Tokens work in format strings and in parse strings.
 | SSS              |              | millisecond, padded to 3                                     | 054                                                         |
 | u                |              | fractional seconds, functionally identical to SSS            | 054                                                         |
 | s                |              | second, no padding                                           | 4                                                           |
-| ss               |              | second, padded to 2 padding                                  | 04                                                          |
+| ss               |              | second, padded to 2                                  | 04                                                          |
 | m                |              | minute, no padding                                           | 7                                                           |
 | mm               |              | minute, padded to 2                                          | 07                                                          |
 | h                |              | hour in 12-hour time, no padding                             | 1                                                           |
@@ -25,17 +27,17 @@ Tokens work in format strings and in parse strings.
 | d                |              | day of the month, no padding                                 | 6                                                           |
 | dd               |              | day of the month, padded to 2                                | 06                                                          |
 | c                | E            | day of the week, as number from 1-7 (Monday is 1, Sunday is 7) | 3                                                           |
-| ccc              | EEE          | day of the week, as an abbreviate localized string           | Wed                                                         |
+| ccc              | EEE          | day of the week, as an abbreviated localized string           | Wed                                                         |
 | cccc             | EEEE         | day of the week, as an unabbreviated localized string        | Wednesday                                                   |
 | ccccc            | EEEEE        | day of the week, as a single localized letter                | W                                                           |
 | L                | M            | month as an unpadded number                                  | 8                                                           |
-| LL               | MM           | month as an padded number                                    | 08                                                          |
+| LL               | MM           | month as a padded number                                    | 08                                                          |
 | LLL              | MMM          | month as an abbreviated localized string                     | Aug                                                         |
 | LLLL             | MMMM         | month as an unabbreviated localized string                   | August                                                      |
 | LLLLL            | MMMMM        | month as a single localized letter                           | A                                                           |
 | y                |              | year, unpadded                                               | 2014                                                        |
 | yy               |              | two-digit year                                               | 14                                                          |
-| yyyy             |              | four- to six- digit year, pads to 4                          | 2014                                                        |
+| yyyy             |              | four- to six-digit year, pads to 4                          | 2014                                                        |
 | G                |              | abbreviated localized era                                    | AD                                                          |
 | GG               |              | unabbreviated localized era                                  | Anno Domini                                                 |
 | GGGGG            |              | one-letter localized era                                     | A                                                           |
@@ -65,7 +67,7 @@ Tokens work in format strings and in parse strings.
 | FF               |              | less short localized date and time with seconds              | Aug 6, 2014, 1:07:04 PM                                     |
 | FFF              |              | verbose localized date and time with seconds                 | August 6, 2014, 1:07:04 PM EDT                              |
 | FFFF             |              | extra verbose localized date and time with seconds           | Wednesday, August 6, 2014, 1:07:04 PM Eastern Daylight Time |
-| q                |              | quarter, no padding                                          | 9                                                           |
-| qq               |              | quarter, padded to 2                                         | 13                                                          |
+| q                |              | quarter, no padding                                          | 3                                                           |
+| qq               |              | quarter, padded to 2                                         | 03                                                          |
 
 Full list of tokens: [Luxon documentation](https://moment.github.io/luxon/#/formatting?id=table-of-tokens).

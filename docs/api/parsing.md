@@ -1,120 +1,55 @@
 # Parsing
 
-`$lp` turns a string, a number, a `Date` or a Luxon `DateTime` into a `DateTime`.
-
-## Input Types
-
-The input can be one of the following types:
-
-- **string**: A string representation of a date or time.
-- **number**: A numeric representation of a date or time, such as a timestamp.
-- **Date**: A JavaScript Date object.
-- **DateTime**: A DateTime object from the Luxon library.
-
-## Input Options
-
-Along with the input, you can pass the format and the zone.
-
 ```ts
-import type { Zone } from 'luxon'
-
-interface InputOptions {
-  format: string
-  zone?: string | Zone
-}
+$lp(value, input?)
 ```
 
-## Available Formats
-
-| format         | description                          | example                                                     |
-| -------------- | ------------------------------------ | ----------------------------------------------------------- |
-| sql            | SQL dates, times, and datetimes      | `2017-05-15 09:24:15`                                       |
-| iso            | ISO 8601 date time string            | `2018-01-06T13:07:04.054`                                   |
-| rfc2822        | RFC 2822                             | `Tue, 01 Nov 2016 13:23:12 +0630`                           |
-| http           | HTTP header specs (RFC 850 and 1123) | `Sun, 06 Nov 1994 08:49:37 GMT`                             |
-| seconds        | Unix timestamp                       | `1542674993`                                                |
-| millis         | Unix timestamp milliseconds          | `1542674993410`                                             |
-| Date           | JavaScript Date object               | `new Date('2020-10-05T14:48:00.000Z')`                      |
-| DateTime       | Luxon DateTime object                | `DateTime.fromISO('2020-10-05T14:48:00.000Z')`              |
-| _tokens_       | see: [Tokens](/api/tokens)               | `yyyy-MM-dd`                                                |
-| *templateName* | see: [Templates](/guide/configuration#templates)         |                                                             |
-
-## Examples
-
-### Parsing String Inputs with Format Patterns
+`$lp` turns a string, a number, a `Date` or a `DateTime` into a Luxon [`DateTime`](https://moment.github.io/luxon/api-docs/index.html#datetime). From there you have the whole Luxon API: `plus`, `startOf`, `diff` and the rest.
 
 ```ts
-// Using a format string directly
-const date1 = $lp('12/07/2024', 'dd/MM/yyyy')
-console.log(date1.toISODate()) // '2024-07-12'
-
-// Using a format in an options object
-const date2 = $lp('12/07/2024', { format: 'dd/MM/yyyy' })
-console.log(date2.toISODate()) // '2024-07-12'
-```
-
-### Using Custom Templates
-
-```ts
-// Configure a custom template
-// In nuxt.config.ts:
-// luxon: {
-//   templates: {
-//     my_template: { format: 'dd-MM--yyyy' }
-//   }
-// }
-
-// Use the template for parsing
-const date = $lp('12-07--2024', { format: 'my_template' })
-console.log(date.toISODate()) // '2024-07-12'
-```
-
-### Parsing Timestamps
-
-```ts
-// Parse from Unix timestamp (milliseconds)
-const fromMillis = $lp(1720742400 * 1000)
-console.log(fromMillis.toISODate()) // '2024-07-12'
-
-// Parse from Unix timestamp (seconds)
-const fromSeconds = $lp(1720787029, { format: 'seconds' })
-console.log(fromSeconds.toISODate()) // '2024-07-12'
-```
-
-### Parsing Date Objects
-
-```ts
-// Parse from Luxon DateTime object
 import { DateTime } from 'luxon'
-const luxonDate = DateTime.fromObject({ year: 2024, month: 7, day: 12 }, { zone: 'utc' })
-const parsedLuxon = $lp(luxonDate)
-console.log(parsedLuxon.toISODate()) // '2024-07-12'
 
-// Parse from JavaScript Date object
-const jsDate = new Date()
-jsDate.setUTCFullYear(2024, 6, 12) // Note: month is 0-indexed in JavaScript Date
-jsDate.setUTCHours(0, 0, 0, 0)
-const parsedJsDate = $lp(jsDate)
-console.log(parsedJsDate.toISODate()) // '2024-07-12'
+const { $lp } = useLuxon()
+
+const due = $lp(invoice.issuedAt).plus({ days: 30 })
+const overdue = due < DateTime.now()
 ```
 
-### Parsing with Built-in Formats
+## Input formats
+
+Without a second argument, `$lp` uses [`input.format`](/guide/configuration#input), which defaults to `iso`. Numbers count as milliseconds; `Date` and `DateTime` values pass through.
+
+| Format | Reads |
+|--------|-------|
+| `iso` | `'2024-07-12'`, `'2024-07-12T12:23:49Z'` |
+| `sql` | `'2024-07-12 12:23:49'` |
+| `http` | `'Fri, 12 Jul 2024 12:23:49 GMT'` |
+| `rfc2822` | `'Fri, 12 Jul 2024 12:23:49 +0000'` |
+| `millis` | `1720787029000` |
+| `seconds`, `unix` | `1720787029` |
+| a template name | whatever its `format` describes |
+| [tokens](/api/tokens) | `'12/07/2024'` with `'dd/MM/yyyy'` |
 
 ```ts
-// ISO format
-const isoDate = $lp('2024-07-12', { format: 'iso' })
-console.log(isoDate.toISODate()) // '2024-07-12'
-
-// SQL format
-const sqlDate = $lp('2024-07-12', { format: 'sql' })
-console.log(sqlDate.toISODate()) // '2024-07-12'
-
-// HTTP format (RFC 850 and 1123)
-const httpDate = $lp('Fri, 12 Jul 2024 12:23:49 GMT', { format: 'http' })
-console.log(httpDate.toISODate()) // '2024-07-12'
-
-// RFC 2822 format
-const rfcDate = $lp('Fri, 12 Jul 2024 12:23:49 +0000', { format: 'rfc2822' })
-console.log(rfcDate.toISODate()) // '2024-07-12'
+$lp('12/07/2024', 'dd/MM/yyyy') // 2024-07-12T00:00:00.000Z
+$lp(1720787029, 'seconds')      // 2024-07-12T12:23:49.000Z
+$lp('2024-07-12 12:23:49', 'sql')
 ```
 
+## Input zone
+
+Strings without an offset are read in [`input.zone`](/guide/configuration#input), UTC by default. Pass a zone to read them somewhere else:
+
+```ts
+$lp('2024-07-12 09:00', { format: 'sql', zone: 'Europe/Rome' })
+// 2024-07-12T09:00:00.000+02:00
+```
+
+## Errors
+
+A string Luxon can't read returns an invalid `DateTime`; check it with `.isValid`. A value of the wrong type for its format throws a `TypeError`:
+
+```ts
+$lp('yesterday').isValid      // false
+$lp('2024-07-12', 'millis')   // TypeError: Value must be an integer, received string
+```

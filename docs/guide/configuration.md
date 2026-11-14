@@ -1,157 +1,82 @@
 # Configuration
 
-Every option lives under the `luxon` key in `nuxt.config.ts`.
-
+You configure the module under the `luxon` key of `nuxt.config.ts`. These are the defaults:
 
 ```ts
-// nuxt.config.ts
 export default defineNuxtConfig({
   modules: ['nuxt-luxon'],
   luxon: {
-    input: {}, // Default input options
-    output: {}, // Default output options
-    templates: {}, // Custom templates
-  }
+    input: {
+      zone: 'utc',
+      format: 'iso',
+    },
+    output: {
+      format: 'short',
+      fallback: '',
+    },
+    templates: {}, // added to the built-in ones
+    injectUtils: true,
+  },
 })
 ```
 
 ## Input
 
-Control how string dates are parsed by default:
+`input` sets how `$lp` and `$luxon` read a value when the call doesn't say otherwise.
 
-```ts
-luxon: {
-  input: {
-    zone: 'utc', // Default timezone for parsing dates
-    format: 'iso'      // Default format string for parsing dates
-  }
-}
-```
+| Option | Type | Default | |
+|--------|------|---------|---|
+| `zone` | `string \| Zone` | `'utc'` | Zone for strings that carry no offset, like `'2024-07-12 09:00'`. |
+| `format` | `string` | `'iso'` | Parser for strings: `iso`, `sql`, `http`, `rfc2822`, a template name or [tokens](/api/tokens). |
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `zone` | `string` | Default timezone to use when parsing dates. Can be a string like 'America/New_York' |
-| `format` | `string` | Default format string to use when parsing dates. |
+Numbers and `Date` objects skip `format`: the module reads numbers as milliseconds and passes `Date` and `DateTime` through.
 
-### Output Options
+## Output
 
-Configure how dates are displayed by default:
+`output` sets how `$luxon` prints a date.
 
-```ts
-luxon: {
-  output: {
-    zone: 'local',       // Timezone for output
-    locale: 'en-US',     // Locale for formatting (omit it to use the environment locale)
-    format: 'short',      // Default format string
-    relative: {...},      // See below for options
-    iso: {...},           // See below for options
-    sql: {...},           // See below for options
-    fallback: '',         // Output for null/undefined or invalid dates
-  }
-}
-```
+| Option | Type | Default | |
+|--------|------|---------|---|
+| `format` | `string \| DateTimeFormatOptions` | `'short'` | Template name, [tokens](/api/tokens) or an `Intl` options object. |
+| `zone` | `string \| Zone` | browser / server zone | Zone to convert to before printing, e.g. `'Europe/Rome'`. |
+| `locale` | `string` | environment locale | A language tag like `'it'`, or `'i18n'` to follow [@nuxtjs/i18n](/guide/i18n). |
+| `fallback` | `string` | `''` | What `$luxon` returns for `null`, `undefined` and invalid dates. |
+| `relative` | `ToRelativeOptions` | | Options for the `relative` format. See [Luxon](https://moment.github.io/luxon/api-docs/index.html#datetimetorelative). |
+| `sql` | `ToSQLOptions` | | Options for the `sql` format. See [Luxon](https://moment.github.io/luxon/api-docs/index.html#datetimetosql). |
+| `iso` | `ToISOTimeOptions` | | Options for the `iso` format. See [Luxon](https://moment.github.io/luxon/api-docs/index.html#datetimetoiso). |
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `zone` | `string` | Timezone to use for formatted output. Can be a string like 'UTC' |
-| `locale` | `string` | Locale to use for formatting (e.g., 'en-US', 'fr-FR'), or `'i18n'` to follow [`@nuxtjs/i18n`](/guide/i18n). Defaults to the [environment locale](/guide/i18n#default-locale). |
-| `format` | `string \| DateTimeFormatOptions \| Intl.DateTimeFormatOptions` | Format string or options object for date formatting. |
-| `relative` | `ToRelativeOptions` | Options for relative time formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetorelative) |
-| `sql` | `ToSQLOptions` | Options for SQL date formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetosql) |
-| `iso` | `ToISOTimeOptions` | Options for ISO date formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetoiso) |
-| `fallback` | `string` | Returned when the value is `null`/`undefined` or the date is invalid, instead of `'Invalid DateTime'`. Defaults to `''`. |
+::: warning Set a zone and a locale with SSR
+Without them, the server prints with its own zone and locale and the browser with the user's. The two outputs can differ and cause a hydration mismatch. Set both, or use `locale: 'i18n'`.
+:::
 
-### Internationalization
+## Templates
 
-By default no locale is set, so dates are formatted with the locale of the environment: the browser
-one on the client, the one of the node process during SSR. The value `'client'` behaves the same way.
-
-Set an explicit locale to make the output predictable, or `'i18n'` to follow the user language.
-`'i18n'` is the default as soon as [`@nuxtjs/i18n`](https://i18n.nuxtjs.org) is registered:
-
-```ts
-luxon: {
-  output: {
-    locale: 'en-US', // a fixed locale
-    // locale: 'i18n', // ...or follow @nuxtjs/i18n
-  },
-}
-```
-
-See [Internationalization](/guide/i18n).
-
-### Templates
-
-A template is a named set of output options. Use the name for parsing and for formatting.
+A template is a named set of output options. Use its name wherever a format goes, for formatting and for parsing:
 
 ```ts
 luxon: {
   templates: {
-    // Define your custom templates
-    userDate: {
-      zone: 'local',
-      format: 'dd MM yyyy',
-    },
-    serverAMS: {
-      zone: 'Europe/Amsterdam',
-      format: 'dd-MM-yyyy HH:mm:ss',
-    },
-    client: {
-      zone: 'local',
-      format: 'short',
-    },
-    // You can also override built-in templates
-    full: { 
-      format: 'EEEE, MMMM d, yyyy h:mm a',
-      locale: 'en-US'
-    }
-  }
+    invoice: { format: 'dd/MM/yyyy' },
+    server: { zone: 'utc', format: "yyyy-MM-dd'T'HH:mm:ss" },
+    // override a built-in one
+    full: { format: 'EEEE d MMMM yyyy, HH:mm' },
+  },
 }
 ```
 
-A template accepts the same options as `output`, and works in `$luxon`/`$lf` as well as `$lp`:
-
-```vue
-<script setup>
+```ts
 const { $luxon, $lp } = useLuxon()
 
-// Parse a date using a template
-const parsedDate = $lp('15 05 2025', 'userDate')
-
-// Format a date using a template
-const amsterdamTime = $luxon(new Date(), 'serverAMS')
-</script>
+$luxon(order.paidAt, 'invoice') // '12/07/2024'
+$lp('2024-07-12T12:23:49', 'server') // DateTime in UTC
 ```
 
-Template names are typed: the module generates their list from the built-in and configured
-templates, so editors autocomplete them wherever a `format` is accepted. Any other string still
-works as a Luxon token string. The type is exported if you need it:
+The module ships with [19 templates](/api/formatting#templates). It also generates a type with every template name, so your editor suggests them in `$luxon` and `$lp`. Import the type if you need it:
 
 ```ts
 import type { TemplateName } from 'nuxt-luxon'
 ```
 
-The module ships with these 20 templates:
+## injectUtils
 
-| format           | example _(with locale `en_US`)_                            |
-| ---------------- | ---------------------------------------------------------- |
-| short            | 10/14/1983, 1:30 PM                                        |
-| shorts           | 10/14/1983, 1:30:23 PM                                     |
-| med              | Oct 14, 1983, 1:30 PM                                      |
-| meds             | Oct 14, 1983, 9:30:33 AM                                   |
-| full             | October 14, 1983, 9:30 AM EDT                              |
-| fulls            | October 14, 1983, 9:30:33 AM EDT                           |
-| huge             | Friday, October 14, 1983, 9:30 AM Eastern Daylight Time    |
-| huges            | Friday, October 14, 1983, 9:30:33 AM Eastern Daylight Time |
-| time             | 9:30 AM                                                    |
-| times            | 09:30:23 AM                                                |
-| time24           | 09:30                                                      |
-| time24s          | 09:30:23                                                   |
-| time24longoffset | 09:30:23 Eastern Daylight Time                             |
-| date_full        | October 14, 1983                                           |
-| date_huge        | Tuesday, October 14, 1983                                  |
-| date_med         | Oct 14, 1983                                               |
-| date_medd        | Fri, Oct 14, 1983                                          |
-| date_short       | 10/14/1983                                                 |
-| date             | 10/14/1983                                                 |
-
+`$luxon`, `$lf` and `$lp` come from a Nuxt plugin. Set `injectUtils: false` to skip the plugin and use only `useLuxon()`.
