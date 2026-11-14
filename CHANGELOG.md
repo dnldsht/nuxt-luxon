@@ -1,6 +1,20 @@
 # Changelog
 
 
+## [1.4.0](https://github.com/dnldsht/nuxt-luxon/compare/v1.3.1...v1.4.0) (2026-11-14)
+
+
+### Features
+
+* output.fallback for empty and invalid dates ([4e8453e](https://github.com/dnldsht/nuxt-luxon/commit/4e8453e7f3fd6720b386c9e001de0667a33a4279))
+* typed template names ([a3c7a50](https://github.com/dnldsht/nuxt-luxon/commit/a3c7a50b66f3ffcfabf63413189e5893564932b6))
+
+
+### Bug Fixes
+
+* **deps:** move defu to dependencies ([2f35977](https://github.com/dnldsht/nuxt-luxon/commit/2f3597708e6623d4e5631ed74b7a3015b854e58a))
+* don't mutate the caller's input options ([6e68e48](https://github.com/dnldsht/nuxt-luxon/commit/6e68e489dec4ed0ced4993e4f117014c50dc8222))
+
 ## [1.3.1](https://github.com/dnldsht/nuxt-luxon/compare/v1.3.0...v1.3.1) (2026-11-13)
 
 
