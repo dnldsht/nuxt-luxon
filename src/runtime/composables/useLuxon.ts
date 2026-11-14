@@ -1,29 +1,30 @@
 import type { DateTime } from 'luxon'
 import type { ComputedRef, MaybeRefOrGetter } from 'vue'
-import type { ParseInput, FormatInputOptions, FormatOutputOptions, LuxonOptions } from '../types'
+import type { FormatInput, ParseInput, FormatInputOptions, FormatOutputOptions, LuxonOptions } from '../types'
 import { makeFormatter, makeParser, makeReactiveFormatter, makeReactiveParser } from '../core'
 import { useI18nLocaleResolver } from '../i18n'
 
 import { useRuntimeConfig } from '#app'
 
-export function useLuxon(value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>): ComputedRef<string>
+export function useLuxon(value: MaybeRefOrGetter<FormatInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>): ComputedRef<string>
 export function useLuxon(): {
-  luxon: (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => ComputedRef<string>
-  lf: (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => ComputedRef<string>
+  luxon: (value: MaybeRefOrGetter<FormatInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => ComputedRef<string>
+  lf: (value: MaybeRefOrGetter<FormatInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => ComputedRef<string>
   lp: (value: MaybeRefOrGetter<ParseInput>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => ComputedRef<DateTime>
 
-  $luxon: (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => string
-  $lf: (value: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => string
+  $luxon: (value: MaybeRefOrGetter<FormatInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => string
+  $lf: (value: MaybeRefOrGetter<FormatInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => string
   $lp: (value: MaybeRefOrGetter<ParseInput>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) => DateTime
 }
 
-export function useLuxon(value?: MaybeRefOrGetter<ParseInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) {
+export function useLuxon(value?: MaybeRefOrGetter<FormatInput>, outputFormat?: MaybeRefOrGetter<FormatOutputOptions>, inputFormat?: MaybeRefOrGetter<FormatInputOptions>) {
   const options = useRuntimeConfig().public.luxon as Required<LuxonOptions>
   const resolveLocale = useI18nLocaleResolver()
 
   const reactiveFormatter = makeReactiveFormatter(options, resolveLocale)
 
-  if (value !== undefined) {
+  // ponytail: a bare `useLuxon(undefined)` still returns the helpers, pass a ref/getter for maybe-empty values
+  if (value !== undefined || outputFormat !== undefined || inputFormat !== undefined) {
     return reactiveFormatter(value, outputFormat, inputFormat)
   }
 

@@ -34,6 +34,7 @@ export const DEFAULT_OPTIONS: ModuleOptions = {
   },
   output: {
     format: 'short',
+    fallback: '',
   },
   templates,
   injectUtils: true,

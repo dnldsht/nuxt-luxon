@@ -18,6 +18,7 @@ interface OutputOptions {
   sql?: ToSQLOptions
   iso?: ToISOTimeOptions
   zone?: string | Zone
+  fallback?: string
 }
 ```
 
@@ -31,6 +32,7 @@ interface OutputOptions {
 - **locale**: the locale to format with, or `'i18n'` to follow [`@nuxtjs/i18n`](/guide/i18n). Left unset, Luxon uses the locale of the environment.
 - **relative**: Options for the relative format. See [Relative](https://moment.github.io/luxon/api-docs/index.html#datetimetorelative) for possible values.
 - **sql**: Options for the SQL format. See [SQL](https://moment.github.io/luxon/api-docs/index.html#datetimetosql) for possible values.
+- **fallback**: the string returned for `null`/`undefined` values and invalid dates. Defaults to `''`, so `$luxon(user.deletedAt)` needs no guard.
 - **iso**: Options for the ISO format. See [ISO](https://moment.github.io/luxon/api-docs/index.html#datetimetoiso) for possible values.
 
 ## Zone {#zone}

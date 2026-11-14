@@ -18,6 +18,8 @@ export interface OutputOptions {
   relative?: ToRelativeOptions
   sql?: ToSQLOptions
   iso?: ToISOTimeOptions
+  /** Returned instead of formatting when the value is `null`/`undefined` or the date is invalid. Defaults to `''`. */
+  fallback?: string
 }
 
 export interface LuxonOptions {
@@ -30,5 +32,7 @@ export interface LuxonOptions {
 export type LocaleResolver = () => string | undefined
 
 export type ParseInput = string | number | Date | DateTime
+/** Formatting also accepts empty values: they render as `output.fallback`. */
+export type FormatInput = ParseInput | null | undefined
 export type FormatInputOptions = string | Partial<InputOptions>
 export type FormatOutputOptions = string | Partial<OutputOptions>

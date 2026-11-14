@@ -46,6 +46,7 @@ luxon: {
     relative: {...},      // See below for options
     iso: {...},           // See below for options
     sql: {...},           // See below for options
+    fallback: '',         // Output for null/undefined or invalid dates
   }
 }
 ```
@@ -58,6 +59,7 @@ luxon: {
 | `relative` | `ToRelativeOptions` | Options for relative time formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetorelative) |
 | `sql` | `ToSQLOptions` | Options for SQL date formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetosql) |
 | `iso` | `ToISOTimeOptions` | Options for ISO date formatting. [See Luxon documentation](https://moment.github.io/luxon/api-docs/index.html#datetimetoiso) |
+| `fallback` | `string` | Returned when the value is `null`/`undefined` or the date is invalid, instead of `'Invalid DateTime'`. Defaults to `''`. |
 
 ### Internationalization
 

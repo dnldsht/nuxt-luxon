@@ -226,6 +226,18 @@ describe('input options', () => {
   })
 })
 
+describe('fallback', () => {
+  it('renders empty and invalid values as output.fallback', () => {
+    const { $luxon } = init()
+
+    expect($luxon(null)).toBe('')
+    expect($luxon(undefined, 'full')).toBe('')
+    expect($luxon('not a date', 'full')).toBe('')
+    expect($luxon('', { format: 'full', fallback: '-' })).toBe('-')
+    expect(init({ output: { fallback: 'n/a' } }).$luxon(null, 'date')).toBe('n/a')
+  })
+})
+
 describe('dates', () => {
   it('simple dates utc', () => {
     const { $luxon } = init({

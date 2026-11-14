@@ -8,8 +8,7 @@
       <code>$luxon(now, 'full')</code>{{ $luxon(now, 'full') }}<br>
       <code>$luxon('2025-04-01', 'date')</code>{{ $luxon('2025-04-01', 'date') }}<br>
       <code>$luxon(null, 'full')</code>
-      <!-- @vue-expect-error null is not a valid input: shows the invalid output -->
-      {{ $luxon(null, 'full') }}
+      {{ $luxon(null, 'full') }} <i>(output.fallback)</i>
     </UCard>
     <USeparator class="my-4" />
     <UCard>
