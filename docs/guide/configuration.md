@@ -123,6 +123,14 @@ const amsterdamTime = $luxon(new Date(), 'serverAMS')
 </script>
 ```
 
+Template names are typed: the module generates their list from the built-in and configured
+templates, so editors autocomplete them wherever a `format` is accepted. Any other string still
+works as a Luxon token string. The type is exported if you need it:
+
+```ts
+import type { TemplateName } from 'nuxt-luxon'
+```
+
 The module ships with these 20 templates:
 
 | format           | example _(with locale `en_US`)_                            |

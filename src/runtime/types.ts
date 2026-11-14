@@ -6,15 +6,30 @@ export const I18N_LOCALE = 'i18n'
 /** A BCP 47 locale tag, or `'i18n'` to follow the active `@nuxtjs/i18n` locale. */
 export type OutputLocale = typeof I18N_LOCALE | (string & Record<never, never>)
 
+/**
+ * Names of the configured templates (built-in + `luxon.templates`), filled in by a type
+ * template the module generates, so editors autocomplete them.
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface LuxonTemplates {}
+
+type AnyString = string & Record<never, never>
+export type TemplateName = keyof LuxonTemplates & string
+
+/** A template name, a built-in parser (`'iso'`, `'sql'`…) or a Luxon token string. */
+export type InputFormat = TemplateName | 'iso' | 'sql' | 'http' | 'rfc2822' | 'jsdate' | 'luxon' | 'millis' | 'seconds' | 'unix' | AnyString
+/** A template name, a built-in output (`'relative'`, `'iso'`…) or a Luxon token string. */
+export type OutputFormat = TemplateName | 'relative' | 'iso' | 'sql' | 'http' | 'rfc' | 'rfc2822' | 'jsdate' | 'millis' | 'seconds' | 'unix' | AnyString
+
 export interface InputOptions {
   zone?: string | Zone
-  format?: string
+  format?: InputFormat
 }
 
 export interface OutputOptions {
   zone?: string | Zone
   locale?: OutputLocale
-  format?: string | DateTimeFormatOptions | Intl.DateTimeFormatOptions
+  format?: OutputFormat | DateTimeFormatOptions | Intl.DateTimeFormatOptions
   relative?: ToRelativeOptions
   sql?: ToSQLOptions
   iso?: ToISOTimeOptions
@@ -34,5 +49,5 @@ export type LocaleResolver = () => string | undefined
 export type ParseInput = string | number | Date | DateTime
 /** Formatting also accepts empty values: they render as `output.fallback`. */
 export type FormatInput = ParseInput | null | undefined
-export type FormatInputOptions = string | Partial<InputOptions>
-export type FormatOutputOptions = string | Partial<OutputOptions>
+export type FormatInputOptions = InputFormat | Partial<InputOptions>
+export type FormatOutputOptions = OutputFormat | Partial<OutputOptions>

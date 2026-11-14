@@ -1,4 +1,4 @@
-import { defineNuxtModule, createResolver, addImportsDir, addPlugin, hasNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addImportsDir, addPlugin, addTypeTemplate, hasNuxtModule } from '@nuxt/kit'
 import { DateTime } from 'luxon'
 import type { LuxonOptions } from './runtime/types'
 import { I18N_LOCALE } from './runtime/types'
@@ -24,6 +24,8 @@ const templates = {
   time: { format: DateTime.TIME_SIMPLE },
   times: { format: DateTime.TIME_WITH_SECONDS },
 }
+
+export type { FormatInput, InputFormat, LuxonTemplates, OutputFormat, TemplateName } from './runtime/types'
 
 export type ModuleOptions = LuxonOptions & { injectUtils?: boolean }
 
@@ -54,9 +56,22 @@ export default defineNuxtModule<ModuleOptions>({
       _options.output = { ..._options.output, locale: I18N_LOCALE }
     }
 
-    // @ts-expect-error don't know how to type this
-    _nuxt.options.runtimeConfig.public.luxon = _options
+    Object.assign(_nuxt.options.runtimeConfig.public, { luxon: _options })
     addImportsDir(resolve('./runtime/composables'))
+
+    // augment `LuxonTemplates` with the configured names, so `format` autocompletes them
+    addTypeTemplate({
+      filename: 'types/nuxt-luxon.d.ts',
+      getContents: () => [
+        `declare module ${JSON.stringify(resolve('./runtime/types'))} {`,
+        '  interface LuxonTemplates {',
+        ...Object.keys(_options.templates ?? {}).map(name => `    ${JSON.stringify(name)}: true`),
+        '  }',
+        '}',
+        'export {}',
+        '',
+      ].join('\n'),
+    })
     if (_options.injectUtils) {
       addPlugin(resolve('./runtime/plugins/luxon-utils'))
     }
