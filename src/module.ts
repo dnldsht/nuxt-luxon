@@ -46,6 +46,9 @@ export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'nuxt-luxon',
     configKey: 'luxon',
+    compatibility: {
+      nuxt: '>=3.0.0',
+    },
   },
   defaults: DEFAULT_OPTIONS,
   setup(_options, _nuxt) {
