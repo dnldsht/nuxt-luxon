@@ -1,6 +1,13 @@
 # Changelog
 
 
+## [1.5.0](https://github.com/dnldsht/nuxt-luxon/compare/v1.4.0...v1.5.0) (2026-11-14)
+
+
+### Features
+
+* declare Nuxt 3 compatibility ([04d2829](https://github.com/dnldsht/nuxt-luxon/commit/04d28293456f689ef96b3077c2fc2a19c495ef70))
+
 ## [1.4.0](https://github.com/dnldsht/nuxt-luxon/compare/v1.3.1...v1.4.0) (2026-11-14)
 
 
