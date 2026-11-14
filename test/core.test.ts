@@ -11,7 +11,7 @@ function init(_options: LuxonOptions = {}) {
   // ICU versions differ on the space before AM/PM (U+202F or a plain space): compare plain spaces
   const $luxon = ((...args: Parameters<typeof format>) => {
     const out = format(...args)
-    return typeof out === 'string' ? out.replace(/ /g, ' ') : out
+    return typeof out === 'string' ? out.replace(/\u202F/g, ' ') : out
   }) as typeof format
   const $lp = makeParser(options)
   return { $luxon, $lp }
@@ -211,6 +211,18 @@ describe('parse', () => {
     for (const { format, value } of formats) {
       expect($lp(value, { format }).toISODate(), format).toBe(date)
     }
+  })
+})
+
+describe('input options', () => {
+  it('does not mutate a reused input options object', () => {
+    const { $lp } = init()
+    const input = { zone: 'utc' }
+
+    expect($lp(new Date(Date.UTC(2024, 6, 12)), input).toISODate()).toBe('2024-07-12')
+    expect(input).toEqual({ zone: 'utc' })
+    // a string value after a Date must still be parsed as iso, not as 'jsdate'
+    expect($lp('2024-07-12', input).toISODate()).toBe('2024-07-12')
   })
 })
 

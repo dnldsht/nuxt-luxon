@@ -3,10 +3,8 @@ import type { FormatInputOptions, FormatOutputOptions, InputOptions, LuxonOption
 import type { ParseOptions } from './parse'
 
 export function extendInput(luxOptions: Required<LuxonOptions>, value: ParseInput, format?: FormatInputOptions): ParseOptions {
-  let options = typeof format === 'string' ? { format } : format
-  if (options === undefined) {
-    options = {}
-  }
+  // copy: we may set `format` below and must not mutate the caller's (possibly reused) object
+  const options: Partial<InputOptions> = typeof format === 'string' ? { format } : { ...format }
 
   let template: Partial<InputOptions> | undefined
 
